@@ -43,7 +43,11 @@ The NFT owners benefit by gaining yield in a risk-free way from their NFTs witho
 
 ### **Potential Issues:**
 
-- How do you prevent someone borrowing an NFT and then transferring it to a new wallet in an attemot to evade the automkatic retrieval?
+- How do you prevent someone borrowing an NFT and then transferring it to a new wallet in an attempt to evade the automatic retrieval?
+- How are the rental contract NFT terms are enforced?
+- Does the borrower need to post collateral in order to do this?
+- What happens if the NFT shoots up in value against the capital (e.g. BAYC against ETH in the last months)?
+- If the borrower were a bad actor, they would be incentivised to keep the NFT and forego the collateral, meaning the lender would lose out (effectively "selling" their NFT for lower than market price).
 
 ---
 
