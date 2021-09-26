@@ -1,0 +1,4 @@
+Discovered a project that is already doing this.
+Research how they have achieved this and whether I can build a slimmed down version.
+https://www.renft.io/
+
