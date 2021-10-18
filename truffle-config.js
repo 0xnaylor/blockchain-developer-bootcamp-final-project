@@ -1,8 +1,7 @@
 const path = require("path");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const dotenv = require("dotenv");
+require("dotenv").config();
 
-dotenv.config();
 const mnemonic = process.env.MNEMONIC;
 const infura_url = process.env.INFURA_URL;
 
@@ -19,7 +18,7 @@ module.exports = {
     },
     rinkeby: {
       // provider: () => new HDWalletProvider(mnemonic, process.env.INFURA_URL),
-      provider: () => new HDWalletProvider(MNEMONIC, infura_url),
+      provider: () => new HDWalletProvider(mnemonic, infura_url),
       network_id: 4,
       gas: 5500000,
       confirmations: 0, // # of confs to wait between deployments. (default: 0)

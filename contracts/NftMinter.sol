@@ -10,7 +10,7 @@ import "hardhat-console/contracts/console.sol";
 // Import helper functions needed for Base62 encoding
 import { Base64 } from "./libraries/Base64.sol";
 
-contract Backend is ERC721URIStorage {
+contract NftMinter is ERC721URIStorage {
 
     // Use OpenZeppelin utility to keep track of tokenIds
     using Counters for Counters.Counter;
@@ -70,7 +70,7 @@ contract Backend is ERC721URIStorage {
         return _tokenIds.current();
     }
 
-    function makeAnEpicNFT() public {
+    function mintNFT() public {
 
         // There will only be 5 NFT's available
         require(_tokenIds.current() <= 5, "There are no NFTs left to mint");

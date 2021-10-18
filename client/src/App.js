@@ -1,84 +1,37 @@
-import React, { Component, useEffect, useState } from "react";
-import BackendContract from "./contracts/Backend.json";
-import getWeb3 from "./getWeb3";
-import backendJSON from "./contracts/Backend.json";
+// import "./styles/App.css";
+// import twitterLogo from "./assets/twitter-logo.svg";
+import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import NftMinterJSON from "./contracts/NftMinter.json";
+// import myEpicNFT from "./utils/MyEpicNft.json";
 
-import "./App.css";
-import Web3 from "web3";
+// Constants
+// const TWITTER_HANDLE = "ben__naylor";
+// const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+// const OPENSEA_LINK = "";
+// const TOTAL_MINT_COUNT = 5;
 
 const App = () => {
-  // state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  const CONTRACT_ADDRESS = "0xBBB14afb20d73ec09daA67d8359cf8880607f13e";
 
+  // state variable used to store our users public wallet
   const [currentAccount, setCurrentAccount] = useState("");
-  const [contract, setContract] = useState("");
-  const [web3, setWeb3] = useState();
 
-  // This runs our function when the page loads
-  useEffect(() => {
-    getWeb3();
-    checkIfWalletIsConnected();
-  }, []);
-
-  const getWeb3 = async () => {
-    const { ethereum, web3 } = window;
-
-    if (ethereum) {
-      console.log("Ethereum object found");
-      const web3 = new Web3(ethereum);
-      console.log("Web3: ", web3);
-      setWeb3(web3);
-    }
-    try {
-      await ethereum.request({ method: "eth_requestAccounts" });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // componentDidMount = async () => {
-  //   console.log("componentDidMount");
-  //   try {
-  //     // Get network provider and web3 instance.
-  //     setWeb3(await getWeb3());
-
-  //     // Use web3 to get the user's accounts.
-  //     const accounts = await web3.eth.getAccounts();
-  //     console.log("Available Accounts: " + accounts);
-
-  //     // Get the contract instance.
-  //     const networkId = await web3.eth.net.getId();
-  //     console.log("Network ID: " + networkId);
-
-  //     const deployedNetwork = SimpleStorageContract.networks[networkId];
-  //     console.log("Contract deployed at: " + deployedNetwork.address);
-
-  //     const instance = new web3.eth.Contract(
-  //       SimpleStorageContract.abi,
-  //       deployedNetwork && deployedNetwork.address
-  //     );
-
-  //     setContract(instance);
-
-  //     // Set web3, accounts, and contract to the state, and then proceed with an
-  //     // example of interacting with the contract's methods.
-  //     // this.setState({ web3, accounts, contract: instance }, this.runExample);
-  //   } catch (error) {
-  //     // Catch any errors for any of the above operations.
-  //     alert(
-  //       `Failed to load web3, accounts, or contract. Check console for details.`
-  //     );
-  //     console.error(error);
-  //   }
-  // };
+  //   let [nftsAvailable, setNftsAvailable] = useState(5);
 
   const checkIfWalletIsConnected = async () => {
-    // Get network provider and web3 instance.
-    // const web3 = await getWeb3();
-    // setWeb3(web3);
+    // make sure we have access to window.ethereum
+    const { ethereum } = window;
 
-    // Use web3 to get the user's accounts.
-    const web3 = new Web3(window.ethereum);
-    const accounts = await web3.eth.getAccounts();
-    console.log("Available Accounts: " + accounts);
+    if (!ethereum) {
+      console.log("Make sure you have metamask");
+      return;
+    } else {
+      console.log("we have the ethereum object", ethereum);
+    }
+
+    // check if we're authorised to access the user's wallet
+    const accounts = await ethereum.request({ method: "eth_accounts" });
 
     // User can have multiple authorised accounts, we grab the first one if its there
     if (accounts.length !== 0) {
@@ -86,75 +39,64 @@ const App = () => {
       console.log("found an authorised account: ", account);
       setCurrentAccount(account);
 
-      // Setup listener! This is for the case where a user comes to our site and ALREADY had their wallet connected + authorized.
-      // setupEventListener();
+      // Setup listener! This is for the case where a user comes to our site and ALREADY had their wallet connected + authorised.
+      setupEventListener();
     } else {
       console.log("No authorised account found");
     }
-    initContract();
-  };
-
-  const initContract = async () => {
-    // Get the contract instance.
-    const web3 = new Web3(window.ethereum);
-
-    const networkId = await web3.eth.net.getId();
-    console.log("Network ID: " + networkId);
-
-    const deployedNetwork = BackendContract.networks[networkId];
-    // console.log("Contract deployed at: " + deployedNetwork.address);
-
-    const instance = new web3.eth.Contract(
-      BackendContract.abi,
-      deployedNetwork && deployedNetwork.address
-    );
-    setContract(instance);
   };
 
   const connectWallet = async () => {
     try {
-      // Get network provider and web3 instance.
-      const web3 = await getWeb3();
+      const { ethereum } = window;
 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
+      if (!ethereum) {
+        alert("Get Metamask");
+        return;
+      }
+
+      // request access to account
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
       // should print out public address once checkIfWalletIsConnected
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
 
       // Setup listener! This is for the case where a user comes to our site and connected their wallet for the first time.
-      // setupEventListener();
+      setupEventListener();
     } catch (error) {
       console.log(error);
     }
   };
 
   const askContractToMintNft = async () => {
+    console.log("askContractToMintNft called");
     try {
       const { ethereum } = window;
 
       if (ethereum) {
-        const chainId = await ethereum.request({ method: "eth_chainId" });
+        let chainId = await ethereum.request({ method: "eth_chainId" });
         console.log("Connected to chain " + chainId);
 
         // String, hex code of the chainId of the Rinkebey test network
-        const rinkebyChainId = "0x4";
-        if (chainId !== rinkebyChainId) {
-          alert("You are not connected to the Rinkeby Test Network!");
-          return;
-        }
+        // const rinkebyChainId = "0x4";
+        // if (chainId !== rinkebyChainId) {
+        //   alert("You are not connected to the Rinkeby Test Network!");
+        //   return;
+        // }
 
-        // const provider = web3.setProvider(ethereum);
-        // const signer = web3.currentProvider.selectedAddress;
-        const backendContract = new web3.eth.Contract(
-          backendJSON.abi,
-          contract
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          NftMinterJSON.abi,
+          signer
         );
-        backendContract.setProvider(web3.givenProvider);
 
         console.log("Going to pop wallet now to pay gas...");
-        let nftTxn = await backendContract.makeAnEpicNFT();
+        let nftTxn = await connectContract.mintNFT();
 
         console.log("Mining... Please wait.");
         await nftTxn.wait();
@@ -169,6 +111,12 @@ const App = () => {
       console.log(error);
     }
   };
+
+  // This runs our function when the page loads
+  useEffect(() => {
+    checkIfWalletIsConnected();
+    // updateRemainingNftCount();
+  }, []);
 
   const renderNotConnectedContainer = () => (
     <button
@@ -188,18 +136,58 @@ const App = () => {
     </button>
   );
 
-  // const runExample = async () => {
-  //   // const { accounts, contract } = this.state;
+  // Setup our listener.
+  const setupEventListener = async () => {
+    // Most of this looks the same as our function askContractToMintNft
+    try {
+      const { ethereum } = window;
 
-  //   // Stores a given value, 5 by default.
-  //   await contract.methods.set(1000).send({ from: accounts[0] });
+      if (ethereum) {
+        // Same stuff again
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          NftMinterJSON.abi,
+          signer
+        );
 
-  //   // Get the value from the contract to prove it worked.
-  //   const response = await contract.methods.get().call();
+        // Catch the event when the contract emits it and display a message to the user.
+        connectedContract.on("NewEpicNFTMinted", (from, tokenId) => {
+          console.log(from, tokenId.toNumber());
+          alert(
+            `Hey there! We've minted your NFT and sent it to your wallet. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
+          );
+        });
 
-  //   // Update state with the result.
-  //   this.setState({ storageValue: response });
-  // };
+        console.log("Setup event listener!");
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateRemainingNftCount = async () => {
+    const { ethereum } = window;
+
+    if (ethereum) {
+      // Same stuff again
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const connectedContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        NftMinterJSON.abi,
+        signer
+      );
+
+      // setNftsAvailable = 5 - connectedContract.getTotalNFTsMintedSoFar();
+      // console.log("nftsAvailable type: " + typeof nftsAvailable);
+      // console.log(nftsAvailable);
+      // console.log("NFTs left for minting: " + nftsAvailable);
+    }
+  };
 
   return (
     <div className="App">
@@ -214,7 +202,15 @@ const App = () => {
             ? renderNotConnectedContainer()
             : renderMintUI()}
         </div>
-        <div className="footer-container"></div>
+        {/* <div className="footer-container">
+          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
+          <a
+            className="footer-text"
+            href={TWITTER_LINK}
+            target="_blank"
+            rel="noreferrer"
+          >{`built by @${TWITTER_HANDLE}`}</a>
+        </div> */}
       </div>
     </div>
   );
