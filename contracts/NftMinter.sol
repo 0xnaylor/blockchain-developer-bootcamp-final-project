@@ -73,7 +73,7 @@ contract NftMinter is ERC721URIStorage {
     function mintNFT() public {
 
         // There will only be 5 NFT's available
-        require(_tokenIds.current() <= 5, "There are no NFTs left to mint");
+        require(_tokenIds.current() <= 20, "There are no NFTs left to mint");
         
         // get the current tokenId, this starts at 0
         uint newItemId = _tokenIds.current();
