@@ -3,12 +3,12 @@ import React, { createContext, useReducer } from 'react';
 const initialContext = {
   ethBalance: '--',
   setEthBalance: () => {},
-  isWalletConnectionModalOpen: false,
-  setWalletConnectModal: () => {},
   txnStatus: 'NOT_SUBMITTED',
   setTxnStatus: () => {},
-  openseaLink: '',
+  openseaLink: 'https://testnets.opensea.io',
   setOpenseaLink: () => {},
+  transactionHash: '',
+  setTransactionHash: () => {},
 };
 
 const appReducer = (state, { type, payload }) => {
@@ -17,12 +17,6 @@ const appReducer = (state, { type, payload }) => {
       return {
         ...state,
         ethBalance: payload,
-      };
-
-    case 'SET_WALLET_MODAL':
-      return {
-        ...state,
-        isWalletConnectModalOpen: payload,
       };
 
     case 'SET_TXN_STATUS':
@@ -35,6 +29,12 @@ const appReducer = (state, { type, payload }) => {
       return {
         ...state,
         openseaLink: payload,
+      };
+
+    case 'SET_TRANSACTION_HASH':
+      return {
+        ...state,
+        transactionHash: payload,
       };
 
     default:
@@ -52,17 +52,17 @@ export const AppContextProvider = ({ children }) => {
     setEthBalance: (balance) => {
       dispatch({ type: 'SET_ETH_BALANCE', payload: balance });
     },
-    isWalletConnectModalOpen: store.isWalletConnectModalOpen,
-    setWalletConnectModal: (open) => {
-      dispatch({ type: 'SET_WALLET_MODAL', payload: open });
-    },
     txnStatus: store.txnStatus,
     setTxnStatus: (status) => {
       dispatch({ type: 'SET_TXN_STATUS', payload: status });
     },
-    tokenId: store.openseaLink,
-    setOpenseaLink: (id) => {
-      dispatch({ type: 'SET_OPENSEA_LINK', payload: id });
+    openseaLink: store.openseaLink,
+    setOpenseaLink: (link) => {
+      dispatch({ type: 'SET_OPENSEA_LINK', payload: link });
+    },
+    transactionHash: store.transactionHash,
+    setTransactionHash: (hash) => {
+      dispatch({ type: 'SET_TRANSACTION_HASH', payload: hash });
     },
   };
 

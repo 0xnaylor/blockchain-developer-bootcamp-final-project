@@ -4,19 +4,12 @@ import { useWeb3React } from '@web3-react/core';
 import { useContract } from './useContract';
 import { useAppContext } from '../AppContext';
 import useIsValidNetwork from './useIsValidNetwork';
-import contractABI from '../static/contractABI';
-import { Contract } from '@ethersproject/contracts';
 
 export const useMintToken = () => {
   const { library, account, chainId, active } = useWeb3React();
   const { isValidNetwork } = useIsValidNetwork();
-  const { setTxnStatus, setOpenseaLink } = useAppContext();
-
-  // const getContractAddress = async () => {
-  //   return NftMinterJSON.networks[chainId].address;
-  // };
-
-  const contractAddress = '0x534eA95F0eA22e6862E16355E7d0643461365dae';
+  const { setTxnStatus, setOpenseaLink, setTransactionHash } = useAppContext();
+  const contractAddress = '0x8097B7457B35378EE9e038C0B9D4d2cD8a10DC3E';
   const contractABI = NftMinterJSON.abi;
 
   const contract = useContract(contractAddress, contractABI);
@@ -25,7 +18,6 @@ export const useMintToken = () => {
     console.log('setupEventListener called');
     if (active) {
       contract.on('NewEpicNFTMinted', (from, tokenId) => {
-        console.log(from, tokenId.toNumber());
         setOpenseaLink(`https://testnets.opensea.io/assets/${contractAddress}/${tokenId.toNumber()}`);
       });
     }
@@ -37,9 +29,10 @@ export const useMintToken = () => {
     console.log('mint function called');
     if (account && isValidNetwork) {
       try {
-        setTxnStatus('MINING');
         const txn = await contract.mintNFT();
-        console.log('txn hash: ', txn);
+        console.log('txn hash: ', txn.hash);
+        setTransactionHash(txn.hash);
+        setTxnStatus('MINING');
         await txn.wait(1);
         setTxnStatus('COMPLETE');
       } catch (error) {

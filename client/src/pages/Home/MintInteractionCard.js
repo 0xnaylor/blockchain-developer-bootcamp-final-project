@@ -25,7 +25,14 @@ const Container = styled.div`
 
 const MintInteractionCard = () => {
   const { active, activate } = useWeb3React();
-  const { txnStatus, setTxnStatus, setOpenseaLink, openseaLink } = useTransaction();
+  const {
+    txnStatus,
+    setTxnStatus,
+    setOpenseaLink,
+    openseaLink,
+    setTransactionHash,
+    transactionHash,
+  } = useTransaction();
   const { mint, setupEventListener } = useMintToken();
 
   useEffect(() => {
@@ -41,6 +48,11 @@ const MintInteractionCard = () => {
     return (
       <Container show>
         <Card style={{ maxWidth: 420, minHeight: 400 }}>
+          <p>Transaction is being prosessed, you can check the progress here:</p>
+          <br />
+          <a href={`https://rinkeby.etherscan.io/tx/${transactionHash}`} target="_blank" rel="noopener noreferrer">
+            etherscan
+          </a>
           <Spinner animation="border" role="status" className="m-auto" />
         </Card>
       </Container>
@@ -55,8 +67,26 @@ const MintInteractionCard = () => {
           <Text block center className="mb-5">
             Txn Was successful!
           </Text>
-          {/* <p>{openseaLink}</p> */}
-          <Button onClick={() => setTxnStatus('NOT_SUBMITTED')}>Go Back</Button>
+          <p>You can view your purchase by browsing to your account on Opeansea</p>
+          <br />
+          <p>Or by following this link:</p>
+          <br />
+          <a href={openseaLink} target="_blank" rel="noopener noreferrer">
+            Opensea
+          </a>
+          <br />
+          <a href={`https://rinkeby.etherscan.io/tx/${transactionHash}`} target="_blank" rel="noopener noreferrer">
+            etherscan
+          </a>
+          <Button
+            onClick={() => {
+              setTxnStatus('NOT_SUBMITTED');
+              setOpenseaLink('');
+              setTransactionHash('');
+            }}
+          >
+            Go Back
+          </Button>
         </Card>
       </Container>
     );
@@ -67,6 +97,9 @@ const MintInteractionCard = () => {
       <Container show>
         <Card style={{ maxWidth: 420, minHeight: 400 }}>
           <Text>Txn ERROR</Text>
+          <a href={`https://rinkeby.etherscan.io/tx/${transactionHash}`} target="_blank" rel="noopener noreferrer">
+            etherscan
+          </a>
           <Button onClick={() => setTxnStatus('NOT_SUBMITTED')}>Go Back</Button>
         </Card>
       </Container>
