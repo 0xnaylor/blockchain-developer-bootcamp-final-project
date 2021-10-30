@@ -8,8 +8,7 @@ import useIsValidNetwork from './useIsValidNetwork';
 export const useMintToken = () => {
   const { library, account, chainId, active } = useWeb3React();
   const { isValidNetwork } = useIsValidNetwork();
-  const { setTxnStatus, setOpenseaLink, setTransactionHash } = useAppContext();
-  const contractAddress = '0x8097B7457B35378EE9e038C0B9D4d2cD8a10DC3E';
+  const { setTxnStatus, setOpenseaLink, setTransactionHash, contractAddress, setMinted } = useAppContext();
   const contractABI = NftMinterJSON.abi;
 
   const contract = useContract(contractAddress, contractABI);
@@ -35,6 +34,7 @@ export const useMintToken = () => {
         setTxnStatus('MINING');
         await txn.wait(1);
         setTxnStatus('COMPLETE');
+        setMinted(getMinted());
       } catch (error) {
         console.log(error);
       }
@@ -45,8 +45,16 @@ export const useMintToken = () => {
     console.log('useMintToken render');
   });
 
+  const getMinted = async () => {
+    const minted = await contract.getTotalNFTsMintedSoFar();
+    // console.log('getMinted called from useMintToken hook: ', minted.toNumber());
+    // return minted.toNumber();
+    return minted.toNumber();
+  };
+
   return {
     mint,
     setupEventListener,
+    getMinted,
   };
 };

@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/NftMinter.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> NftMinter.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">2.56% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/39</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/2</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">12.5% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">2.56% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/39</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+&nbsp;
+// We first import some OpenZeppelin Contracts.
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "hardhat-console/contracts/console.sol";
+&nbsp;
+// Import helper functions needed for Base62 encoding
+import { Base64 } from "./libraries/Base64.sol";
+&nbsp;
+contract NftMinter is ERC721URIStorage {
+&nbsp;
+    // Use OpenZeppelin utility to keep track of tokenIds
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+&nbsp;
+    // We split the SVG at the part where it asks for the background color.
+    string svgPartOne = "&lt;svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'&gt;&lt;style&gt;.base { fill: white; font-family: serif; font-size: 24px; }&lt;/style&gt;&lt;rect width='100%' height='100%' fill='";
+    string svgPartTwo = "'/&gt;&lt;text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'&gt;";
+&nbsp;
+    string[] firstWords = ["Slick", "Sliding", "Flapping", "Flipping", "Sodding", "Whopping"];
+    string[] secondWords = ["Flange", "Simple", "Crapping", "Humongous", "Slippy", "fat"];
+    string[] thirdWords = ["Mongy", "Cabbage", "Lettuce", "Turnip", "Fridge", "Carrot"];
+    string[] colors = ["red", "#08C2A8", "black", "yellow", "blue", "green"];
+&nbsp;
+    // define an event that canbe emitted after a mint
+    event NewEpicNFTMinted(address sender, uint256 tokenId);
+&nbsp;
+    constructor() ERC721("SquareNFT", "SQUARE") { //ERC721URIStorage inherits from the ERC721 contract which requires arguments to be passed into its constructor. 
+        console.log("This is my NFT contract. Woah!");
+    }
+&nbsp;
+      // Bit of code duplication in the following 3 functions. This could probably be refactored to make it more DRY.
+<span class="fstat-no" title="function not covered" >    function pickRandomFirstWord(uint256 tokenId) public view returns (string memory) {</span>
+        // I seed the random generator. More on this in the lesson. 
+<span class="cstat-no" title="statement not covered" >        uint256 rand = random(string(abi.encodePacked("FIRST_WORD", Strings.toString(tokenId))));</span>
+        // Squash the # between 0 and the length of the array to avoid going out of bounds.
+<span class="cstat-no" title="statement not covered" >        rand = rand % firstWords.length</span>;
+<span class="cstat-no" title="statement not covered" >        return firstWords[rand];</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function pickRandomSecondWord(uint256 tokenId) public view returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 rand = random(string(abi.encodePacked("SECOND_WORD", Strings.toString(tokenId))));</span>
+<span class="cstat-no" title="statement not covered" >        rand = rand % secondWords.length</span>;
+<span class="cstat-no" title="statement not covered" >        return secondWords[rand];</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function pickRandomThirdWord(uint256 tokenId) public view returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >        console.log("Random Seed: ", string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))))</span>;
+<span class="cstat-no" title="statement not covered" >        uint256 rand = random(string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))));</span>
+<span class="cstat-no" title="statement not covered" >        console.log("pickRandomThirdWord rand: ", rand)</span>;
+<span class="cstat-no" title="statement not covered" >        rand = rand % thirdWords.length</span>;
+<span class="cstat-no" title="statement not covered" >        console.log("pickRandomThirdWord rand: ", rand)</span>;
+<span class="cstat-no" title="statement not covered" >        return thirdWords[rand];</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function pickRandomColor(uint256 tokenId) public view returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >        uint256 rand = random(string(abi.encodePacked("COLOR", Strings.toString(tokenId))));</span>
+<span class="cstat-no" title="statement not covered" >        rand = rand % colors.length</span>;
+<span class="cstat-no" title="statement not covered" >        return colors[rand];</span>
+    } 
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function random(string memory input) internal pure returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return uint(keccak256(abi.encodePacked(input)));</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getTotalNFTsMintedSoFar () public view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return _tokenIds.current();</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function mintNFT() public {</span>
+&nbsp;
+        // There will only be 5 NFT's available
+<span class="cstat-no" title="statement not covered" >        require(_tokenIds.current() &lt;= 20, "There are no NFTs left to mint")</span>;
+        
+        // get the current tokenId, this starts at 0
+<span class="cstat-no" title="statement not covered" >        uint newItemId = _tokenIds.current();</span>
+&nbsp;
+        // randomly grab one word from each of the arrays
+<span class="cstat-no" title="statement not covered" >        string memory first = pickRandomFirstWord(newItemId);</span>
+<span class="cstat-no" title="statement not covered" >        string memory second = pickRandomSecondWord(newItemId);</span>
+<span class="cstat-no" title="statement not covered" >        string memory third = pickRandomThirdWord(newItemId);</span>
+<span class="cstat-no" title="statement not covered" >        string memory combinedWord = string(abi.encodePacked(first, second, third));</span>
+<span class="cstat-no" title="statement not covered" >        console.log("combinedWord: ", combinedWord)</span>;
+&nbsp;
+        // Add the random color in.
+<span class="cstat-no" title="statement not covered" >        string memory randomColor = pickRandomColor(newItemId);</span>
+<span class="cstat-no" title="statement not covered" >        string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, combinedWord, "&lt;/text&gt;&lt;/svg&gt;"));</span>
+<span class="cstat-no" title="statement not covered" >        console.log("finalSvg: ", finalSvg)</span>;
+&nbsp;
+        // get all the JSON metadata in place and base64 encode it
+<span class="cstat-no" title="statement not covered" >        string memory json = Base64.encode(</span>
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name": "',combinedWord,
+                        '", "description": "A highly acclaimed collection of squares.", "image": "data:image/svg+xml;base64,',
+                    // We add data:image/svg+xml;base64 and then append our base64 encode our svg.
+                    Base64.encode(bytes(finalSvg)),
+                    '"}'
+                    )
+                )
+            )
+        );
+<span class="cstat-no" title="statement not covered" >        console.log("BASE64 encoded JSON: ", json)</span>;
+&nbsp;
+        // Just like before, we prepend data:application/json;base64, to our data.
+<span class="cstat-no" title="statement not covered" >        string memory finalTokenUri = string(</span>
+            abi.encodePacked("data:application/json;base64,", json)
+        );
+<span class="cstat-no" title="statement not covered" >        console.log("finalTokenUri: ", finalTokenUri)</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        console.log("\n--------------------")</span>;
+        // console.log(finalTokenUri);
+<span class="cstat-no" title="statement not covered" >        console.log("--------------------\n")</span>;  
+&nbsp;
+        // actually mint the NFT to the sender using msg.sender
+<span class="cstat-no" title="statement not covered" >        _safeMint(msg.sender, newItemId)</span>;
+&nbsp;
+        // set the NFTs data
+<span class="cstat-no" title="statement not covered" >        _setTokenURI(newItemId, finalTokenUri)</span>;
+&nbsp;
+        // increment the counter for when the next NFT is minted
+<span class="cstat-no" title="statement not covered" >        _tokenIds.increment()</span>;
+<span class="cstat-no" title="statement not covered" >        console.log("An NFT with ID %s has been minted to %s", newItemId, msg.sender)</span>;
+<span class="cstat-no" title="statement not covered" >        emit NewEpicNFTMinted(msg.sender, newItemId);</span>
+    }
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Oct 28 2021 10:28:43 GMT+0100 (British Summer Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

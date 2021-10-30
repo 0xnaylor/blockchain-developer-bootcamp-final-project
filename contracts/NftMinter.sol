@@ -12,6 +12,8 @@ import { Base64 } from "./libraries/Base64.sol";
 
 contract NftMinter is ERC721URIStorage {
 
+    uint maxMints = 3000;
+
     // Use OpenZeppelin utility to keep track of tokenIds
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
@@ -30,6 +32,14 @@ contract NftMinter is ERC721URIStorage {
 
     constructor() ERC721("SquareNFT", "SQUARE") { //ERC721URIStorage inherits from the ERC721 contract which requires arguments to be passed into its constructor. 
         console.log("This is my NFT contract. Woah!");
+    }
+
+    function getRemainingMints () public view returns (uint256) {
+        return maxMints - _tokenIds.current();
+    }
+
+    function getTotalNFTsMintedSoFar () public view returns (uint256) {
+        return _tokenIds.current();
     }
 
       // Bit of code duplication in the following 3 functions. This could probably be refactored to make it more DRY.
@@ -64,10 +74,6 @@ contract NftMinter is ERC721URIStorage {
 
     function random(string memory input) internal pure returns (uint256) {
         return uint(keccak256(abi.encodePacked(input)));
-    }
-
-    function getTotalNFTsMintedSoFar () public view returns (uint256) {
-        return _tokenIds.current();
     }
 
     function mintNFT() public {

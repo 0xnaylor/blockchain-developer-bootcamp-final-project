@@ -26,6 +26,7 @@ module.exports = {
       skipDryRun: true, // Skip dry run before migrations? (default: false for public nets )
     },
   },
+  plugins: ["solidity-coverage"],
   compilers: {
     solc: {
       version: "^0.8.0",

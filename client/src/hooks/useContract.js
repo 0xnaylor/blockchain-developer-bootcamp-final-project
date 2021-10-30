@@ -17,6 +17,8 @@ export function useContract(contractAddress, ABI) {
   const { library, account, provider } = useWeb3React();
 
   // const signerOrProvider = ethers.getDefaultProvider();
+  console.log('account: ', account);
+  console.log('library: ', library);
 
   const signerOrProvider = account ? library.getSigner(account).connectUnchecked() : library;
 

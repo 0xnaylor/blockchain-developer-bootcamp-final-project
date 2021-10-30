@@ -9,6 +9,10 @@ const initialContext = {
   setOpenseaLink: () => {},
   transactionHash: '',
   setTransactionHash: () => {},
+  contractAddress: '0x9a89bb8E34CD1D2A8636BFd3679f24320B975A8C',
+  setContractAddress: () => {},
+  minted: 0,
+  setMinted: () => {},
 };
 
 const appReducer = (state, { type, payload }) => {
@@ -37,6 +41,18 @@ const appReducer = (state, { type, payload }) => {
         transactionHash: payload,
       };
 
+    case 'SET_CONTRACT_ADDRESS':
+      return {
+        ...state,
+        contractAddress: payload,
+      };
+
+    case 'SET_MINTED':
+      return {
+        ...state,
+        minted: payload,
+      };
+
     default:
       return state;
   }
@@ -63,6 +79,14 @@ export const AppContextProvider = ({ children }) => {
     transactionHash: store.transactionHash,
     setTransactionHash: (hash) => {
       dispatch({ type: 'SET_TRANSACTION_HASH', payload: hash });
+    },
+    contractAddress: store.contractAddress,
+    setContractAddress: (address) => {
+      dispatch({ type: 'SET_CONTRACT_ADDRESS', payload: address });
+    },
+    minted: store.minted,
+    setMinted: (minted) => {
+      dispatch({ type: 'SET_MINTED', payload: minted });
     },
   };
 
