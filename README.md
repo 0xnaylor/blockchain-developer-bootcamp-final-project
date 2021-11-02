@@ -5,6 +5,9 @@ Create a .env file in the projects root directory and add the following:
 - Your metamask seed
 - Infura URL including API key.
 
+Test generate a test coverage report run the following command:
+truffle run coverage
+
 TODO:
 
 - Cannot connect metamask to frontend when running the backend on Ganache.

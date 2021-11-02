@@ -12,7 +12,7 @@ import { Base64 } from "./libraries/Base64.sol";
 
 contract NftMinter is ERC721URIStorage {
 
-    uint maxMints = 3000;
+    uint public maxMints = 3000;
 
     // Use OpenZeppelin utility to keep track of tokenIds
     using Counters for Counters.Counter;
@@ -43,7 +43,8 @@ contract NftMinter is ERC721URIStorage {
     }
 
       // Bit of code duplication in the following 3 functions. This could probably be refactored to make it more DRY.
-    function pickRandomFirstWord(uint256 tokenId) public view returns (string memory) {
+      // I think these functions should be internal.
+    function pickRandomFirstWord(uint256 tokenId) internal view returns (string memory) {
         // I seed the random generator. More on this in the lesson. 
         uint256 rand = random(string(abi.encodePacked("FIRST_WORD", Strings.toString(tokenId))));
         // Squash the # between 0 and the length of the array to avoid going out of bounds.
@@ -51,13 +52,13 @@ contract NftMinter is ERC721URIStorage {
         return firstWords[rand];
     }
 
-    function pickRandomSecondWord(uint256 tokenId) public view returns (string memory) {
+    function pickRandomSecondWord(uint256 tokenId) internal view returns (string memory) {
         uint256 rand = random(string(abi.encodePacked("SECOND_WORD", Strings.toString(tokenId))));
         rand = rand % secondWords.length;
         return secondWords[rand];
     }
 
-    function pickRandomThirdWord(uint256 tokenId) public view returns (string memory) {
+    function pickRandomThirdWord(uint256 tokenId) internal view returns (string memory) {
         console.log("Random Seed: ", string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))));
         uint256 rand = random(string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))));
         console.log("pickRandomThirdWord rand: ", rand);
@@ -66,7 +67,7 @@ contract NftMinter is ERC721URIStorage {
         return thirdWords[rand];
     }
 
-    function pickRandomColor(uint256 tokenId) public view returns (string memory) {
+    function pickRandomColor(uint256 tokenId) internal view returns (string memory) {
         uint256 rand = random(string(abi.encodePacked("COLOR", Strings.toString(tokenId))));
         rand = rand % colors.length;
         return colors[rand];
@@ -79,7 +80,7 @@ contract NftMinter is ERC721URIStorage {
     function mintNFT() public {
 
         // There will only be 5 NFT's available
-        require(_tokenIds.current() <= 20, "There are no NFTs left to mint");
+        require(_tokenIds.current() <= maxMints, "There are no NFTs left to mint");
         
         // get the current tokenId, this starts at 0
         uint newItemId = _tokenIds.current();
