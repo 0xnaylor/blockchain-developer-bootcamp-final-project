@@ -166,7 +166,7 @@ const MintInteractionCard = () => {
       <Card style={{ maxWidth: 420, minHeight: 400 }}>
         <p className="sub-text">Each unique. Each beautiful. Discover your NFT today.</p>
         {/* <p className="sub-text">{minted}/3000 minted</p> */}
-        <p className="header gradient-text">{active ? renderMintUI() : renderNotConnectedContainer()}</p>
+        <div className="header gradient-text">{active ? renderMintUI() : renderNotConnectedContainer()}</div>
       </Card>
     </Container>
   );

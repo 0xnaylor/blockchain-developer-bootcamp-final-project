@@ -3717,18 +3717,18 @@
     "4": {
       "events": {},
       "links": {},
-      "address": "0x98E6e07B00e063b0Fc9058B169e50fbA21CDFBbd",
-      "transactionHash": "0x716be48d5c46b8bf45f8e4214b744fc18864295c01f459a5465f4efe2cb4dfa7"
+      "address": "0x2DC0CCC06b2Adf1423531D2b16660c3b7f42f123",
+      "transactionHash": "0x9ae859ca31afec9df3e8154a4f772ff19df244a9432cf8cbef73cc904d462fed"
     },
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x1EDaf97655e3be7e4794791E2414239996FCf0D3",
-      "transactionHash": "0xc69523a25d58b35fce1f2d1dc724439db1d15abec07367aa6774d2fd69a3bd3a"
+      "address": "0x756bca18C3F7d24B89F75434ad6b27f75b86c575",
+      "transactionHash": "0x82718444cd569a5d8e4de73411280e82fd285ce362c3c95c480cb56388a110aa"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-10-28T17:42:16.180Z",
+  "updatedAt": "2021-11-02T10:13:28.449Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Brecht Devos <brecht@loopring.org>",
