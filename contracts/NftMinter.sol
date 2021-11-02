@@ -3,14 +3,17 @@ pragma solidity ^0.8.0;
 
 // We first import some OpenZeppelin Contracts.
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat-console/contracts/console.sol";
 
 // Import helper functions needed for Base62 encoding
 import { Base64 } from "./libraries/Base64.sol";
 
-contract NftMinter is ERC721URIStorage {
+contract NftMinter is ERC721URIStorage, Pausable, Ownable {
 
     uint public maxMints = 3000;
 
@@ -32,6 +35,18 @@ contract NftMinter is ERC721URIStorage {
 
     constructor() ERC721("SquareNFT", "SQUARE") { //ERC721URIStorage inherits from the ERC721 contract which requires arguments to be passed into its constructor. 
         console.log("This is my NFT contract. Woah!");
+    }
+
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal whenNotPaused override {
+        super._beforeTokenTransfer(from, to, tokenId);
     }
 
     function getRemainingMints () public view returns (uint256) {

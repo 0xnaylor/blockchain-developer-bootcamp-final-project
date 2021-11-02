@@ -8,6 +8,8 @@ const TestUtils = require("./utils/testUtils");
  * See docs: https://www.trufflesuite.com/docs/truffle/testing/writing-tests-in-javascript
  */
 contract("NftMinter", function (accounts) {
+  const [deployerAddress, tokenHolderOneAddress, tokenHolderTwoAddress] =
+    accounts;
   const expectedMinter = accounts[0];
   let deplyedContract;
   let maxMints;
@@ -18,12 +20,12 @@ contract("NftMinter", function (accounts) {
   });
 
   describe("minting an NFT", async () => {
-    it("retrieve owner of mint 0", async () => {
-      await deplyedContract.mintNFT({ from: expectedMinter });
+    it("correctly retrieve owner of mint", async () => {
+      await deplyedContract.mintNFT({ from: tokenHolderOneAddress });
       const minter = await deplyedContract.ownerOf(0);
       assert.equal(
         minter,
-        expectedMinter,
+        tokenHolderOneAddress,
         "The minter address did not match the expected minter address"
       );
     });
@@ -55,6 +57,8 @@ contract("NftMinter", function (accounts) {
         "The actual remaining mints did not match the expected value."
       );
     });
+
+    it("");
   });
 
   describe("Test Suite 2", async () => {
