@@ -7,4 +7,10 @@ const getCurrentMintCount = async () => {
   return remaining.words[0];
 };
 
+const getMaxMints = async () => {
+  const deployedContract = await NftMinter.deployed();
+  return new BigNumber(await deployedContract.maxMints.call()).toNumber();
+};
+
 exports.getCurrentMintCount = getCurrentMintCount;
+exports.getMaxMints = getMaxMints;

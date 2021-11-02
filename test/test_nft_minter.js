@@ -8,25 +8,18 @@ const TestUtils = require("./utils/testUtils");
  * See docs: https://www.trufflesuite.com/docs/truffle/testing/writing-tests-in-javascript
  */
 contract("NftMinter", function (accounts) {
+  const expectedMinter = accounts[0];
   let deplyedContract;
-  let expectedMinter;
   let maxMints;
 
-  // before(async () => {
-  //   deplyedContract = await NftMinter.deployed();
-  // });
+  before(async () => {
+    deplyedContract = await NftMinter.deployed();
+    maxMints = await TestUtils.getMaxMints();
+  });
 
   describe("minting an NFT", async () => {
-    before("mint an NFT using accounts[0]", async () => {
-      deplyedContract = await NftMinter.deployed();
-      await deplyedContract.mintNFT({ from: accounts[0] });
-      expectedMinter = accounts[0];
-      maxMints = new BigNumber(
-        await deplyedContract.maxMints.call()
-      ).toNumber();
-    });
-
     it("retrieve owner of mint 0", async () => {
+      await deplyedContract.mintNFT({ from: expectedMinter });
       const minter = await deplyedContract.ownerOf(0);
       assert.equal(
         minter,
