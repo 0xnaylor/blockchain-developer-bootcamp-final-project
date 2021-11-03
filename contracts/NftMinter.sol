@@ -8,14 +8,15 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "hardhat-console/contracts/console.sol";
 
 // Import helper functions needed for Base62 encoding
 import { Base64 } from "./libraries/Base64.sol";
 
-contract NftMinter is ERC721URIStorage, Pausable, Ownable {
+contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable {
 
-    uint public maxMints = 3000;
+    uint private supplyCap = 3000;
 
     // Use OpenZeppelin utility to keep track of tokenIds
     using Counters for Counters.Counter;
@@ -33,8 +34,9 @@ contract NftMinter is ERC721URIStorage, Pausable, Ownable {
     // define an event that canbe emitted after a mint
     event NewEpicNFTMinted(address sender, uint256 tokenId);
 
-    constructor() ERC721("SquareNFT", "SQUARE") { //ERC721URIStorage inherits from the ERC721 contract which requires arguments to be passed into its constructor. 
-        console.log("This is my NFT contract. Woah!");
+    constructor(string memory _name, string memory _symbol, uint _supplyCap) ERC721(_name, _symbol) {
+        require(_supplyCap > 0, "supplyCap must be greater than 0");
+        supplyCap = _supplyCap;
     }
 
     function pause() public onlyOwner {
@@ -45,20 +47,18 @@ contract NftMinter is ERC721URIStorage, Pausable, Ownable {
         _unpause();
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal whenNotPaused override {
-        super._beforeTokenTransfer(from, to, tokenId);
+    function getSupplyCap() public view returns(uint256) {
+        return supplyCap;
     }
 
     function getRemainingMints () public view returns (uint256) {
-        return maxMints - _tokenIds.current();
+        return supplyCap - _tokenIds.current();
     }
 
     function getTotalNFTsMintedSoFar () public view returns (uint256) {
         return _tokenIds.current();
     }
 
-      // Bit of code duplication in the following 3 functions. This could probably be refactored to make it more DRY.
-      // I think these functions should be internal.
     function pickRandomFirstWord(uint256 tokenId) internal view returns (string memory) {
         // I seed the random generator. More on this in the lesson. 
         uint256 rand = random(string(abi.encodePacked("FIRST_WORD", Strings.toString(tokenId))));
@@ -92,10 +92,16 @@ contract NftMinter is ERC721URIStorage, Pausable, Ownable {
         return uint(keccak256(abi.encodePacked(input)));
     }
 
-    function mintNFT() public {
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
+    }
 
-        // There will only be 5 NFT's available
-        require(_tokenIds.current() <= maxMints, "There are no NFTs left to mint");
+    function tokenURI(uint256 tokenId) public view override (ERC721, ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(tokenId);
+    }
+
+    function mintNFT() public {
+        require(_tokenIds.current() <= supplyCap, "There are no NFTs left to mint");
         
         // get the current tokenId, this starts at 0
         uint newItemId = _tokenIds.current();
@@ -148,5 +154,14 @@ contract NftMinter is ERC721URIStorage, Pausable, Ownable {
         _tokenIds.increment();
         console.log("An NFT with ID %s has been minted to %s", newItemId, msg.sender);
         emit NewEpicNFTMinted(msg.sender, newItemId);
+    }
+
+    // The following functions are overrides required by Solidity.
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }
 }
