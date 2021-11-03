@@ -3717,8 +3717,8 @@
     "4": {
       "events": {},
       "links": {},
-      "address": "0x2DC0CCC06b2Adf1423531D2b16660c3b7f42f123",
-      "transactionHash": "0x9ae859ca31afec9df3e8154a4f772ff19df244a9432cf8cbef73cc904d462fed"
+      "address": "0xA587577Af816D8209aBaDdF0b68dD198b32F1159",
+      "transactionHash": "0x98fdc76c3ed66965d5a8d6f2b7e698045b0ad120394e95a643fa90f1bc9a5099"
     },
     "5777": {
       "events": {},
@@ -3728,7 +3728,7 @@
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-02T10:13:28.449Z",
+  "updatedAt": "2021-11-02T15:10:55.148Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Brecht Devos <brecht@loopring.org>",
