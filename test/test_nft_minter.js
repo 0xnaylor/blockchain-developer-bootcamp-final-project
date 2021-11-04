@@ -153,6 +153,11 @@ contract("NftMinter Test Suite", function (accounts) {
       await contract.mintNFT({ from: sender });
     });
 
+    beforeEach(async () => {
+      // make sure the sender has a token to transfer
+      await contract.mintNFT({ from: sender });
+    });
+
     it("a transfer decreases sender's balance and increasing recipient's balance by as much", async () => {
       // get both balances
       const preTransferSenderBalance = await contract.balanceOf(sender);
@@ -184,16 +189,11 @@ contract("NftMinter Test Suite", function (accounts) {
     });
 
     it("Can't transfer to ZERO address from any account", async () => {
-      // ensure the sender has a token to send
-      await contract.mintNFT({ from: sender });
       // get the id of the token owned by the sender
       await expectRevert.unspecified(transfer(sender, constants.ZERO_ADDRESS));
     });
 
     it("Can transfer to oneself, although it's pointless", async () => {
-      // ensure the sender has a token to send
-      await contract.mintNFT({ from: sender });
-
       // get sender balance
       const preTransferSenderBalance = await contract.balanceOf(sender);
       const [tokenId] = await transfer(sender, sender);
@@ -221,10 +221,8 @@ contract("NftMinter Test Suite", function (accounts) {
       } while (user == sender || user == receiver);
 
       const preTransferUserBalance = await contract.balanceOf(user);
-      // ensure the sender has a token to send
-      await contract.mintNFT({ from: sender });
       await transfer(sender, receiver);
-      // get both updated balances
+      // get updated balance
       const postTransferUserBalance = await contract.balanceOf(user);
 
       // assert that the user balance has not changed.
@@ -249,8 +247,6 @@ contract("NftMinter Test Suite", function (accounts) {
     });
 
     it("Should fire 'Transfer' event after transfer", async () => {
-      await contract.mintNFT({ from: sender });
-
       const [tokenId, reciept] = await transfer(sender, receiver);
       expectEvent(reciept, EventNames.Transfer, {
         0: sender,
