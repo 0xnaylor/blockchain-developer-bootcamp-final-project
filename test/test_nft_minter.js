@@ -35,7 +35,7 @@ contract("NftMinter Test Suite", function (accounts) {
     } while (minter == admin);
   });
 
-  describe.only("Initial State Tests", async () => {
+  describe("Initial State Tests", async () => {
     it("contract should be deployed with the correct name and symbol", async () => {
       assert.equal(await contract.name(), name);
       assert.equal(await contract.symbol(), symbol);
@@ -68,7 +68,7 @@ contract("NftMinter Test Suite", function (accounts) {
     });
   });
 
-  describe.only("minting an NFT", async () => {
+  describe("minting an NFT", async () => {
     it("correctly retrieve owner of mint", async () => {
       const tokenId = await contract.totalSupply();
       await contract.mintNFT({ from: minter });
@@ -141,15 +141,133 @@ contract("NftMinter Test Suite", function (accounts) {
   });
 
   describe("Transfers", () => {
-    it("Can transfer decreasing sender's balance and increasing recipient's balance as much", async () => {});
+    let sender = null,
+      receiver = null;
 
-    it("Can't transfer to ZERO address from any account", async () => {});
+    before(async () => {
+      // pick a sender address
+      sender = chance.pickone(accounts);
+      // pick receiver address
+      do {
+        receiver = chance.pickone(accounts);
+      } while (receiver == sender);
 
-    it("Can transfer to oneself, although it seems a little silly", async () => {});
+      // make sure the sender has something to send.
+      await contract.mintNFT({ from: sender });
+    });
 
-    it("Can transfer zero amount, although such a empty transfer seems a little silly", async () => {});
+    it("a transfer decreases sender's balance and increasing recipient's balance by as much", async () => {
+      // get both balances
+      const preTransferSenderBalance = await contract.balanceOf(sender);
+      const preTransferReceiverBalance = await contract.balanceOf(receiver);
 
-    it("Should not change balances of irrelative accounts(neither sender nor recipient", async () => {});
+      // get the id of the token owned by the sender
+      const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
+
+      // do the transfer
+      await contract.safeTransferFrom(sender, receiver, tokenId, {
+        from: sender,
+      });
+
+      // get both updated balances
+      const postTransferSenderBalance = await contract.balanceOf(sender);
+      const postTransferReceiverBalance = await contract.balanceOf(receiver);
+
+      // assert that the senders balance has decreased correctly
+      assert.equal(
+        postTransferSenderBalance.toNumber(),
+        preTransferSenderBalance.sub(toBN(1)).toNumber(),
+        "The senders balance was not decreased correctly"
+      );
+
+      // assert that the receivers balance has increased correctly
+      assert.equal(
+        postTransferReceiverBalance.toNumber(),
+        preTransferReceiverBalance.add(toBN(1)).toNumber(),
+        "The receivers balance was not increased correctly"
+      );
+
+      // assert that the receiver is now the owner of the tokenId transferred
+      assert.isTrue(
+        (await contract.ownerOf(tokenId)) == receiver,
+        "The tokenId is not owned by the receiver"
+      );
+    });
+
+    it("Can't transfer to ZERO address from any account", async () => {
+      // ensure the sender has a token to send
+      await contract.mintNFT({ from: sender });
+      // get the id of the token owned by the sender
+      const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
+      await expectRevert.unspecified(
+        contract.safeTransferFrom(sender, constants.ZERO_ADDRESS, tokenId, {
+          from: sender,
+        })
+      );
+    });
+
+    it("Can transfer to oneself, although it's pointless", async () => {
+      // ensure the sender has a token to send
+      await contract.mintNFT({ from: sender });
+
+      // get sender balance
+      const preTransferSenderBalance = await contract.balanceOf(sender);
+
+      // get the id of the token owned by the sender
+      const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
+
+      // do the transfer
+      await contract.safeTransferFrom(sender, sender, tokenId, {
+        from: sender,
+      });
+
+      // get new sender balance
+      const postTransferSenderBalance = await contract.balanceOf(sender);
+
+      // assert that the senders balance has decreased correctly
+      assert.equal(
+        postTransferSenderBalance.toNumber(),
+        preTransferSenderBalance.toNumber(),
+        "The senders balance should not have changed"
+      );
+
+      // assert that the receiver is now the owner of the tokenId transferred
+      assert.isTrue(
+        (await contract.ownerOf(tokenId)) == sender,
+        "The tokenId is not owned by the sender"
+      );
+    });
+
+    it.only("Should not change balances of irrelative accounts(neither sender nor recipient", async () => {
+      // pick an account that a different from both the sender and the receiver.
+      let user = null;
+      do {
+        user = chance.pickone(accounts);
+      } while (user == sender || user == receiver);
+
+      // ensure the sender has a token to send
+      await contract.mintNFT({ from: sender });
+
+      // get the id of the token owned by the sender
+      const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
+
+      const preTransferUserBalance = await contract.balanceOf(user);
+
+      // do the transfer
+      await contract.safeTransferFrom(sender, receiver, tokenId, {
+        from: sender,
+      });
+
+      // get both updated balances
+      const postTransferUserBalance = await contract.balanceOf(user);
+
+      // assert that the user balance has not changed.
+      assert.equal(
+        preTransferUserBalance.toNumber(),
+        postTransferUserBalance.toNumber(),
+        "The user not involved in the transfer should not have seen their balance change."
+      );
+    });
 
     it("Should not change total supply at all after transfers", async () => {});
 
