@@ -1,22 +1,41 @@
 const NftMinter = artifacts.require("NftMinter");
-const BigNumber = require("bignumber.js");
+const BN = require("bn.js");
 const TestUtils = require("./utils/testUtils");
-var Chance = require("chance");
+const {
+  constants,
+  expectEvent,
+  expectRevert,
+} = require("@openzeppelin/test-helpers");
+const toBN = web3.utils.toBN;
+const Chance = require("chance");
+const { ZERO_ADDRESS } = require("@openzeppelin/test-helpers/src/constants");
 
 contract("NftMinter Test Suite", function (accounts) {
   "use strict";
 
-  describe("Initial State Tests", async () => {
-    let chance, admin, name, symbol, supply, contract;
+  const EventNames = {
+    Transfer: "Transfer",
+    Approval: "Approval",
+    Minted: "NewEpicNFTMinted",
+  };
 
-    before(async () => {
-      await unlockAccounts();
-      [chance, admin, name, symbol, supply] = await createFixtures();
-      contract = await NftMinter.new(name, symbol, supply, {
-        from: admin,
-      });
+  let chance, admin, name, symbol, supply, contract, minter;
+
+  before(async () => {
+    console.log("Main Before called");
+    await unlockAccounts();
+    [chance, admin, name, symbol, supply] = await createFixtures();
+    contract = await NftMinter.new(name, symbol, supply, {
+      from: admin,
     });
 
+    // pick a minter address
+    do {
+      minter = chance.pickone(accounts);
+    } while (minter == admin);
+  });
+
+  describe.only("Initial State Tests", async () => {
     it("contract should be deployed with the correct name and symbol", async () => {
       assert.equal(await contract.name(), name);
       assert.equal(await contract.symbol(), symbol);
@@ -50,23 +69,8 @@ contract("NftMinter Test Suite", function (accounts) {
   });
 
   describe.only("minting an NFT", async () => {
-    let chance, admin, name, symbol, supply, contract;
-    before(async () => {
-      await unlockAccounts();
-      [chance, admin, name, symbol, supply] = await createFixtures();
-      contract = await NftMinter.new(name, symbol, supply, {
-        from: admin,
-      });
-    });
-
     it("correctly retrieve owner of mint", async () => {
-      let minter = null;
-      // select any account other than admin
-      do {
-        minter = chance.pickone(accounts);
-      } while (minter == admin);
-
-      const tokenId = await TestUtils.getCurrentMintCount();
+      const tokenId = await contract.totalSupply();
       await contract.mintNFT({ from: minter });
       const owner = await contract.ownerOf(tokenId);
       assert.equal(
@@ -76,44 +80,81 @@ contract("NftMinter Test Suite", function (accounts) {
       );
     });
 
-    it("test contract returns correct current mint count", async () => {
+    it("return correct current mint count", async () => {
       // check the current mint count
-      const currentCount = await TestUtils.getCurrentMintCount();
-      console.log("currentCount: ", currentCount);
-
+      const currentCount = await contract.totalSupply();
+      const expectedCount = currentCount.add(toBN(1));
       // mint and NFT
-      await contract.mintNFT({ from: accounts[0] });
-
+      await contract.mintNFT({ from: minter });
       // check that the new mint count is the previous +1
-      const newCurrentCount = await TestUtils.getCurrentMintCount();
-      console.log("newCurrentCount: ", newCurrentCount);
-
+      const newCurrentCount = await contract.totalSupply();
       assert.equal(
-        newCurrentCount,
-        currentCount + 1,
+        newCurrentCount.toNumber(),
+        expectedCount.toNumber(),
         "The mint count was not incremented correctly."
       );
     });
 
-    it("test contract returns correct remaining nft count", async () => {
-      const minted = await TestUtils.getCurrentMintCount();
-      const remainingMints = new BigNumber(
+    it("returns correct remaining nft count", async () => {
+      const minted = await contract.totalSupply();
+      const remainingMints = new BN(
         await contract.getRemainingMints()
       ).toNumber();
       assert.equal(
-        supplyCap - minted,
+        supply - minted,
         remainingMints,
         "The actual remaining mints did not match the expected value."
       );
     });
+
+    it("when user mints a token their balance is increased correctly", async () => {
+      // get current balance of minter
+      const currentBalance = await contract.balanceOf(minter);
+      // mint an NFT
+      await contract.mintNFT({ from: minter });
+      // get the new balance of the minter
+      const newBalance = await contract.balanceOf(minter);
+      // check that the minters balance has increased by 1
+      assert.equal(
+        newBalance.toNumber(),
+        currentBalance.add(toBN(1)).toNumber(),
+        "users balance was not increased by 1"
+      );
+    });
+
+    it("should fire a 'transfer' event after minting", async () => {
+      const currentCount = await contract.totalSupply();
+      expectEvent(
+        await contract.mintNFT({ from: minter }),
+        EventNames.Transfer,
+        { 0: ZERO_ADDRESS, 1: minter, 2: currentCount }
+      );
+    });
+
+    it("should fire a 'NewEpicNFTMinted' event after minting", async () => {
+      const currentCount = await contract.totalSupply();
+      expectEvent(await contract.mintNFT({ from: minter }), EventNames.Minted, {
+        0: minter,
+        1: currentCount,
+      });
+    });
   });
 
-  // describe("Check owner account balance", () => {
-  //   it("Owner Account balance", async () => {
-  //     const balance = await web3.eth.getBalance(ownerAddress);
-  //     console.log(balance);
-  //   });
-  // });
+  describe("Transfers", () => {
+    it("Can transfer decreasing sender's balance and increasing recipient's balance as much", async () => {});
+
+    it("Can't transfer to ZERO address from any account", async () => {});
+
+    it("Can transfer to oneself, although it seems a little silly", async () => {});
+
+    it("Can transfer zero amount, although such a empty transfer seems a little silly", async () => {});
+
+    it("Should not change balances of irrelative accounts(neither sender nor recipient", async () => {});
+
+    it("Should not change total supply at all after transfers", async () => {});
+
+    it("Should fire 'Transfer' event after transfer", async () => {});
+  });
 
   const createFixtures = async () => {
     const chance = new Chance();
@@ -122,7 +163,7 @@ contract("NftMinter Test Suite", function (accounts) {
     const symbol = chance
       .word({ length: chance.natural({ min: 1, max: 5 }) })
       .toUpperCase();
-    const supply = chance.natural({ min: 1, max: 20 });
+    const supply = chance.natural({ min: 1000, max: 2000 });
     return [chance, admin, name, symbol, supply];
   };
 
@@ -140,16 +181,3 @@ contract("NftMinter Test Suite", function (accounts) {
     console.table(output);
   };
 });
-
-// contract("Contract2", function (accounts) {
-//   const [ownerAddress, tokenHolderOneAddress, tokenHolderTwoAddress] = accounts;
-
-//   before(async () => {
-//     deplyedContract = await NftMinter.deployed();
-//   });
-
-//   it("Owner Account balance in second contract", async () => {
-//     const balance = await deplyedContract.balanceOf(ownerAddress);
-//     console.log(balance);
-//   });
-// });
