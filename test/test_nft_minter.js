@@ -22,7 +22,6 @@ contract("NftMinter Test Suite", function (accounts) {
   let chance, admin, name, symbol, supply, contract, minter;
 
   before(async () => {
-    console.log("Main Before called");
     await unlockAccounts();
     [chance, admin, name, symbol, supply] = await createFixtures();
     contract = await NftMinter.new(name, symbol, supply, {
@@ -88,9 +87,8 @@ contract("NftMinter Test Suite", function (accounts) {
       await contract.mintNFT({ from: minter });
       // check that the new mint count is the previous +1
       const newCurrentCount = await contract.totalSupply();
-      assert.equal(
-        newCurrentCount.toNumber(),
-        expectedCount.toNumber(),
+      assert.isTrue(
+        newCurrentCount.eq(expectedCount),
         "The mint count was not incremented correctly."
       );
     });
@@ -115,9 +113,8 @@ contract("NftMinter Test Suite", function (accounts) {
       // get the new balance of the minter
       const newBalance = await contract.balanceOf(minter);
       // check that the minters balance has increased by 1
-      assert.equal(
-        newBalance.toNumber(),
-        currentBalance.add(toBN(1)).toNumber(),
+      assert.isTrue(
+        newBalance.eq(currentBalance.add(toBN(1))),
         "users balance was not increased by 1"
       );
     });
@@ -161,29 +158,21 @@ contract("NftMinter Test Suite", function (accounts) {
       const preTransferSenderBalance = await contract.balanceOf(sender);
       const preTransferReceiverBalance = await contract.balanceOf(receiver);
 
-      // get the id of the token owned by the sender
-      const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
-
-      // do the transfer
-      await contract.safeTransferFrom(sender, receiver, tokenId, {
-        from: sender,
-      });
+      const [tokenId] = await transfer(sender, receiver);
 
       // get both updated balances
       const postTransferSenderBalance = await contract.balanceOf(sender);
       const postTransferReceiverBalance = await contract.balanceOf(receiver);
 
       // assert that the senders balance has decreased correctly
-      assert.equal(
-        postTransferSenderBalance.toNumber(),
-        preTransferSenderBalance.sub(toBN(1)).toNumber(),
+      assert.isTrue(
+        postTransferSenderBalance.eq(preTransferSenderBalance.sub(toBN(1))),
         "The senders balance was not decreased correctly"
       );
 
       // assert that the receivers balance has increased correctly
-      assert.equal(
-        postTransferReceiverBalance.toNumber(),
-        preTransferReceiverBalance.add(toBN(1)).toNumber(),
+      assert.isTrue(
+        postTransferReceiverBalance.eq(preTransferReceiverBalance.add(toBN(1))),
         "The receivers balance was not increased correctly"
       );
 
@@ -198,12 +187,7 @@ contract("NftMinter Test Suite", function (accounts) {
       // ensure the sender has a token to send
       await contract.mintNFT({ from: sender });
       // get the id of the token owned by the sender
-      const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
-      await expectRevert.unspecified(
-        contract.safeTransferFrom(sender, constants.ZERO_ADDRESS, tokenId, {
-          from: sender,
-        })
-      );
+      await expectRevert.unspecified(transfer(sender, constants.ZERO_ADDRESS));
     });
 
     it("Can transfer to oneself, although it's pointless", async () => {
@@ -212,22 +196,13 @@ contract("NftMinter Test Suite", function (accounts) {
 
       // get sender balance
       const preTransferSenderBalance = await contract.balanceOf(sender);
-
-      // get the id of the token owned by the sender
-      const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
-
-      // do the transfer
-      await contract.safeTransferFrom(sender, sender, tokenId, {
-        from: sender,
-      });
-
+      const [tokenId] = await transfer(sender, sender);
       // get new sender balance
       const postTransferSenderBalance = await contract.balanceOf(sender);
 
       // assert that the senders balance has decreased correctly
-      assert.equal(
-        postTransferSenderBalance.toNumber(),
-        preTransferSenderBalance.toNumber(),
+      assert.isTrue(
+        postTransferSenderBalance.eq(preTransferSenderBalance),
         "The senders balance should not have changed"
       );
 
@@ -238,41 +213,63 @@ contract("NftMinter Test Suite", function (accounts) {
       );
     });
 
-    it.only("Should not change balances of irrelative accounts(neither sender nor recipient", async () => {
+    it("Should not change balances of irrelative accounts(neither sender nor recipient", async () => {
       // pick an account that a different from both the sender and the receiver.
       let user = null;
       do {
         user = chance.pickone(accounts);
       } while (user == sender || user == receiver);
 
+      const preTransferUserBalance = await contract.balanceOf(user);
       // ensure the sender has a token to send
       await contract.mintNFT({ from: sender });
-
-      // get the id of the token owned by the sender
-      const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
-
-      const preTransferUserBalance = await contract.balanceOf(user);
-
-      // do the transfer
-      await contract.safeTransferFrom(sender, receiver, tokenId, {
-        from: sender,
-      });
-
+      await transfer(sender, receiver);
       // get both updated balances
       const postTransferUserBalance = await contract.balanceOf(user);
 
       // assert that the user balance has not changed.
-      assert.equal(
-        preTransferUserBalance.toNumber(),
-        postTransferUserBalance.toNumber(),
+      assert.isTrue(
+        preTransferUserBalance.eq(postTransferUserBalance),
         "The user not involved in the transfer should not have seen their balance change."
       );
     });
 
-    it("Should not change total supply at all after transfers", async () => {});
+    it("Should not change total supply at all after transfers", async () => {
+      // get total supply
+      const totalSupply = await contract.totalSupply();
 
-    it("Should fire 'Transfer' event after transfer", async () => {});
+      // make a transfer
+      await transfer(sender, receiver);
+      // assert new total supply is equal to the original total supply
+      const totalSuuply2 = await contract.totalSupply();
+      assert.isTrue(
+        totalSupply.eq(totalSuuply2),
+        "Total supply should not have changed."
+      );
+    });
+
+    it("Should fire 'Transfer' event after transfer", async () => {
+      await contract.mintNFT({ from: sender });
+
+      const [tokenId, reciept] = await transfer(sender, receiver);
+      expectEvent(reciept, EventNames.Transfer, {
+        0: sender,
+        1: receiver,
+        2: tokenId,
+      });
+    });
   });
+
+  const transfer = async (sender, receiver) => {
+    // get the id of the token owned by the sender
+    const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
+    // do the transfer
+    const receipt = await contract.safeTransferFrom(sender, receiver, tokenId, {
+      from: sender,
+    });
+
+    return [tokenId, receipt];
+  };
 
   const createFixtures = async () => {
     const chance = new Chance();
@@ -295,7 +292,5 @@ contract("NftMinter Test Suite", function (accounts) {
       };
       output.push(obj);
     }
-    console.debug(`The number of accounts : ${accounts.length}`);
-    console.table(output);
   };
 });
