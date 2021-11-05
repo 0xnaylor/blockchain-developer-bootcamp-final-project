@@ -100,7 +100,7 @@ contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Owna
         return super.tokenURI(tokenId);
     }
 
-    function mintNFT() public {
+    function mintNFT() public whenNotPaused{
         require(_tokenIds.current() <= supplyCap, "There are no NFTs left to mint");
         
         // get the current tokenId, this starts at 0
@@ -157,7 +157,7 @@ contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Owna
     }
 
     // The following functions are overrides required by Solidity.
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override(ERC721, ERC721Enumerable) {
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal whenNotPaused override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 

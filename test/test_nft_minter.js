@@ -1,14 +1,14 @@
 const NftMinter = artifacts.require("NftMinter");
 const BN = require("bn.js");
-const TestUtils = require("./utils/testUtils");
+const toBN = web3.utils.toBN;
+const Chance = require("chance");
+const { ZERO_ADDRESS } = require("@openzeppelin/test-helpers/src/constants");
+const catchRevert = require("./utils/exceptions").catchRevert;
 const {
   constants,
   expectEvent,
   expectRevert,
 } = require("@openzeppelin/test-helpers");
-const toBN = web3.utils.toBN;
-const Chance = require("chance");
-const { ZERO_ADDRESS } = require("@openzeppelin/test-helpers/src/constants");
 
 contract("NftMinter Test Suite", function (accounts) {
   "use strict";
@@ -17,6 +17,8 @@ contract("NftMinter Test Suite", function (accounts) {
     Transfer: "Transfer",
     Approval: "Approval",
     Minted: "NewEpicNFTMinted",
+    Pause: "Paused",
+    Unpause: "Unpaused",
   };
 
   let chance, admin, name, symbol, supply, contract, minter;
@@ -64,6 +66,13 @@ contract("NftMinter Test Suite", function (accounts) {
     it("the starting total supply should be 0", async () => {
       const totalSupply = await contract.totalSupply();
       assert.isTrue(totalSupply.isZero());
+    });
+
+    it("contract should not be paused", async () => {
+      assert.isFalse(
+        await contract.paused(),
+        "contract should not be paused upon intialisation"
+      );
     });
   });
 
@@ -148,9 +157,6 @@ contract("NftMinter Test Suite", function (accounts) {
       do {
         receiver = chance.pickone(accounts);
       } while (receiver == sender);
-
-      // make sure the sender has something to send.
-      await contract.mintNFT({ from: sender });
     });
 
     beforeEach(async () => {
@@ -239,9 +245,9 @@ contract("NftMinter Test Suite", function (accounts) {
       // make a transfer
       await transfer(sender, receiver);
       // assert new total supply is equal to the original total supply
-      const totalSuuply2 = await contract.totalSupply();
+      const totalSupply2 = await contract.totalSupply();
       assert.isTrue(
-        totalSupply.eq(totalSuuply2),
+        totalSupply.eq(totalSupply2),
         "Total supply should not have changed."
       );
     });
@@ -253,6 +259,99 @@ contract("NftMinter Test Suite", function (accounts) {
         1: receiver,
         2: tokenId,
       });
+    });
+  });
+
+  describe("Approval", () => {
+    let tokenId = null;
+    let accToApprove = null;
+    let owner = null;
+
+    beforeEach(async () => {
+      await contract.mintNFT({ from: owner });
+      tokenId = await contract.tokenOfOwnerByIndex(owner, 0);
+    });
+
+    before(async () => {
+      owner = minter;
+      // pick a new account to approve
+      do {
+        accToApprove = chance.pickone(accounts);
+      } while (accToApprove == owner);
+    });
+
+    it("A token should have no accounts approved on it by default", async () => {
+      const approved = await contract.getApproved(tokenId);
+      assert.equal(
+        approved,
+        constants.ZERO_ADDRESS,
+        `The token should have no accounts approved by default`
+      );
+    });
+
+    it("Owner of the token can approve another account on it", async () => {
+      const owner = await contract.ownerOf(tokenId);
+
+      await contract.approve(accToApprove, tokenId, { from: owner });
+
+      const approvedAccount = await contract.getApproved(tokenId);
+      assert.equal(
+        approvedAccount,
+        accToApprove,
+        `The token did not have the expected account approval set`
+      );
+    });
+
+    it("Should fire 'Approval' event after approval", async () => {
+      const owner = await contract.ownerOf(tokenId);
+      const receipt = await contract.approve(accToApprove, tokenId, {
+        from: owner,
+      });
+      expectEvent(receipt, EventNames.Approval, {
+        0: owner,
+        1: accToApprove,
+        2: tokenId,
+      });
+    });
+  });
+
+  describe("Pausing the contract", () => {
+    let sender = null;
+
+    before(async () => {
+      sender = chance.pickone(accounts);
+      await contract.mintNFT({ from: sender });
+    });
+
+    beforeEach(async () => {
+      if (!(await contract.paused())) {
+        await contract.pause({ from: admin });
+      }
+    });
+
+    it("only owner should be able to pause the contract", async () => {});
+
+    it("accounts should be unable to mint if the contract is paused", async () => {
+      await catchRevert(contract.mintNFT());
+    });
+
+    it("accounts should be unable to transfer if the contract is paused", async () => {
+      let receiver = null;
+      // pick receiver address
+      do {
+        receiver = chance.pickone(accounts);
+      } while (receiver == sender);
+
+      await catchRevert(transfer(sender, receiver));
+    });
+
+    it("pausing a contract should emit a pause event", async () => {
+      await contract.unpause({ from: admin });
+      expectEvent(await contract.pause({ from: admin }), EventNames.Pause);
+    });
+
+    it("unpausing a contract should emit an unpause event", async () => {
+      expectEvent(await contract.unpause({ from: admin }), EventNames.Unpause);
     });
   });
 
