@@ -1,15 +1,10 @@
-/**
- *Submitted for verification at Etherscan.io on 2021-09-05
- */
-
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.0;
 
 /// [MIT License]
 /// @title Base64
 /// @notice Provides a function for encoding some bytes in base64
-/// @author Brecht Devos <brecht@loopring.org>
 library Base64 {
     bytes internal constant TABLE =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
