@@ -4,11 +4,11 @@
       "/static/css/client.a8a64bbc.css"
     ],
     "js": [
-      "/static/js/client.86411c27.js"
+      "/static/js/client.da2717a2.js"
     ],
     "map": [
       "/static/css/client.a8a64bbc.css.map",
-      "/static/js/client.86411c27.js.map"
+      "/static/js/client.da2717a2.js.map"
     ],
     "chunks": [
       0
@@ -23,7 +23,7 @@
     ],
     "txt": [
       "/robots.txt",
-      "/static/js/client.86411c27.js.LICENSE.txt"
+      "/static/js/client.da2717a2.js.LICENSE.txt"
     ],
     "svg": [
       "/static/media/metamask-logo.fd681d4a.svg"
