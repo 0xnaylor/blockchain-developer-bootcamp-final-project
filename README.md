@@ -89,15 +89,9 @@ npm install -g ganache-cli
 
 ### Deploying to a local dev network
 
-Note: connecting to the contract instance running on the Rinkeby testnet will show etherscan and opensea links upon successful minting.
+Note: The etherscan and opensea links shown in the UI after initiating a mint will only work when connected to Rinkeby.
 
-To spin up a local development blockchain run the provided script (in the project root directory):
-
-```
-sudo scripts/start_gananche_cli.sh
-```
-
-Then deploy the contract
+Deploy the contract
 
 ```
 truffle migrate --network development --reset
@@ -127,7 +121,13 @@ truffle migrate --network rinkeby --reset
 
 ## Running the test suite
 
-sudo is required because the script creates a log file (/var/log/ganache.log) so needs write permission.
+Start a local development blockchain on port 8545 or alternatively, if on unix-based OS, run the script provided:
+
+```
+sudo scripts/start_gananche_cli.sh
+```
+
+Note: sudo is required to run the script because it needs permission to create the log file (/var/log/ganache.log).
 
 To run the test suite simple enter the following command:
 
@@ -143,10 +143,8 @@ truffle run coverage
 
 ## Extra functionality to add if there is time.
 
-- Cannot connect metamask to frontend when running the backend on Ganache.
 - Automate the retrieval of the contract address from the generated JSON file, instead of having to manually copy and paste it after a new deployment.
 - Maybe experiment with making the contract upgradable via a proxy
 - Add an alert to the UI if you are not connected to the right network
-- Get Words appearing on new lines
 - Remember to remove all console logs from both front end and back end before submission
 - Add a note in this README about the time delay being able to see the metadata on OpenSea.
