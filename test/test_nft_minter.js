@@ -16,7 +16,7 @@ contract("NftMinter Test Suite", function (accounts) {
   const EventNames = {
     Transfer: "Transfer",
     Approval: "Approval",
-    Minted: "NewEpicNFTMinted",
+    Minted: "SurvivalKitNftClaimed",
     Pause: "Paused",
     Unpause: "Unpaused",
   };
@@ -37,9 +37,18 @@ contract("NftMinter Test Suite", function (accounts) {
   });
 
   describe("Initial State Tests", async () => {
+    // Test that the contract deploys with the expect state
     it("contract should be deployed with the correct name and symbol", async () => {
-      assert.equal(await contract.name(), name);
-      assert.equal(await contract.symbol(), symbol);
+      assert.equal(
+        await contract.name(),
+        name,
+        "The contract was not deployed with the expected name"
+      );
+      assert.equal(
+        await contract.symbol(),
+        symbol,
+        "The contract was not deployed with the expected symbol"
+      );
     });
 
     it("contract should be deployed with the correct supply cap", async () => {
@@ -48,11 +57,6 @@ contract("NftMinter Test Suite", function (accounts) {
         supply,
         "The contracts supply cap did not match the expected value"
       );
-    });
-
-    it("contract should not be paused upon deployment", async () => {
-      const paused = await contract.paused();
-      assert.isFalse(paused);
     });
 
     it("the starting balance of all addresses is 0", async () => {
@@ -68,15 +72,16 @@ contract("NftMinter Test Suite", function (accounts) {
       assert.isTrue(totalSupply.isZero());
     });
 
-    it("contract should not be paused", async () => {
+    it("contract should not be paused upon deployment", async () => {
       assert.isFalse(
         await contract.paused(),
-        "contract should not be paused upon intialisation"
+        "contract should not be paused upon deployment"
       );
     });
   });
 
   describe("minting an NFT", async () => {
+    // tests covering the minting of an NFT
     it("correctly retrieve owner of mint", async () => {
       const tokenId = await contract.totalSupply();
       await contract.mintNFT({ from: minter });
@@ -98,7 +103,7 @@ contract("NftMinter Test Suite", function (accounts) {
       const newCurrentCount = await contract.totalSupply();
       assert.isTrue(
         newCurrentCount.eq(expectedCount),
-        "The mint count was not incremented correctly."
+        "The mint count was not incremented correctly. Each mint should increment the count by 1"
       );
     });
 
@@ -147,6 +152,7 @@ contract("NftMinter Test Suite", function (accounts) {
   });
 
   describe("Transfers", () => {
+    // tests covering the transferring of tokens between addresses
     let sender = null,
       receiver = null;
 
@@ -178,13 +184,13 @@ contract("NftMinter Test Suite", function (accounts) {
       // assert that the senders balance has decreased correctly
       assert.isTrue(
         postTransferSenderBalance.eq(preTransferSenderBalance.sub(toBN(1))),
-        "The senders balance was not decreased correctly"
+        "The senders balance was not decreased correctly. It should have decreased by 1"
       );
 
       // assert that the receivers balance has increased correctly
       assert.isTrue(
         postTransferReceiverBalance.eq(preTransferReceiverBalance.add(toBN(1))),
-        "The receivers balance was not increased correctly"
+        "The receivers balance was not increased correctly. It should have been increased by 1"
       );
 
       // assert that the receiver is now the owner of the tokenId transferred
@@ -194,7 +200,7 @@ contract("NftMinter Test Suite", function (accounts) {
       );
     });
 
-    it("Can't transfer to ZERO address from any account", async () => {
+    it("transfering to ZERO address from any account should revert", async () => {
       // get the id of the token owned by the sender
       await expectRevert.unspecified(transfer(sender, constants.ZERO_ADDRESS));
     });
@@ -215,11 +221,11 @@ contract("NftMinter Test Suite", function (accounts) {
       // assert that the receiver is now the owner of the tokenId transferred
       assert.isTrue(
         (await contract.ownerOf(tokenId)) == sender,
-        "The tokenId is not owned by the sender"
+        "The tokenId should still be owned by the sender"
       );
     });
 
-    it("Should not change balances of irrelative accounts(neither sender nor recipient", async () => {
+    it("Should not change balances of accounts not involved in the transaction", async () => {
       // pick an account that a different from both the sender and the receiver.
       let user = null;
       do {
@@ -252,7 +258,7 @@ contract("NftMinter Test Suite", function (accounts) {
       );
     });
 
-    it("Should fire 'Transfer' event after transfer", async () => {
+    it("Should fire 'Transfer' event after transferring a token", async () => {
       const [tokenId, reciept] = await transfer(sender, receiver);
       expectEvent(reciept, EventNames.Transfer, {
         0: sender,
@@ -263,6 +269,7 @@ contract("NftMinter Test Suite", function (accounts) {
   });
 
   describe("Approval", () => {
+    // tests covering approvals
     let tokenId = null;
     let accToApprove = null;
     let owner = null;
@@ -355,6 +362,8 @@ contract("NftMinter Test Suite", function (accounts) {
     });
   });
 
+  // helper function to transfer a token from a sender account to a receiver account
+  // returns the tokenId of the token owned by the sender as well as the reciept (promise) created from the transaction.
   const transfer = async (sender, receiver) => {
     // get the id of the token owned by the sender
     const tokenId = await contract.tokenOfOwnerByIndex(sender, 0);
@@ -366,7 +375,9 @@ contract("NftMinter Test Suite", function (accounts) {
     return [tokenId, receipt];
   };
 
+  // A helper function to set up and return various parameters required for tests.
   const createFixtures = async () => {
+    // chance is used to inject randomness into the tests. This enhances the likelihood of capturing bugs.
     const chance = new Chance();
     const admin = chance.pickone(accounts);
     const name = chance.word({ length: 5 });
@@ -377,6 +388,7 @@ contract("NftMinter Test Suite", function (accounts) {
     return [chance, admin, name, symbol, supply];
   };
 
+  // A helper function to unlock all test accounts
   const unlockAccounts = async () => {
     const output = [];
     for (const acct of accounts) {

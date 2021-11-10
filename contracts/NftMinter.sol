@@ -41,7 +41,7 @@ contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Owna
     /// @notice Event to be emitted after a successful mint
     /// @param sender The address of the transaction sender
     /// @param tokenId The id of the token that has just been minted
-    event NewEpicNFTMinted(address sender, uint256 tokenId);
+    event SurvivalKitNftClaimed(address sender, uint256 tokenId);
 
     /// @notice contract constructor. Takes parameters and passes them to the inherited ERC721 contract constructor
     /// @param _name the name of the contract
@@ -216,7 +216,7 @@ contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Owna
         // increment the counter for when the next NFT is minted
         _tokenIds.increment();
         console.log("An NFT with ID %s has been minted to %s", newItemId, msg.sender);
-        emit NewEpicNFTMinted(msg.sender, newItemId);
+        emit SurvivalKitNftClaimed(msg.sender, newItemId);
     }
 
     // The following functions are overrides required by Solidity.

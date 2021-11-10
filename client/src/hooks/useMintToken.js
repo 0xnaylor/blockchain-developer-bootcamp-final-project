@@ -16,7 +16,7 @@ export const useMintToken = () => {
   const setupEventListener = async () => {
     console.log('setupEventListener called');
     if (active) {
-      contract.on('NewEpicNFTMinted', (from, tokenId) => {
+      contract.on('SurvivalKitNftClaimed', (from, tokenId) => {
         setOpenseaLink(`https://testnets.opensea.io/assets/${contractAddress}/${tokenId.toNumber()}`);
       });
     }

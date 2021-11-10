@@ -13,7 +13,7 @@
 - [x] At least two design patterns from the 'Smart Contracts' section: https://docs.google.com/document/d/1tthsXLlv5BDXEGUfoP6_MAsL_8_T0sRBNQs_1OnPxak/edit
 - [ ] Protect against two attack vectors (incl. SWC Number). Same link as above
 - [x] Contain a markdown file named design_pattern_decisions.md and avoiding_common_attacks.md to describe design pattern and security decisions.
-- [ ] Have at least 5 unit tests for your smart contract. In the code explain what the tests are covering and their expected behaviour.
+- [x] Have at least 5 unit tests for your smart contract. In the code explain what the tests are covering and their expected behaviour.
 - [ ] Include a deployed_address.txt file detailing the testnet address and network where the latest code is deployed.
 - Have a frontend interface that includes:
   - [x] Detects the presence of metamask
@@ -22,13 +22,13 @@
   - [x] Allows a user to submit a transaction to update the smart contract state
   - [x] Updates the frontend if the transaction is successful or not.
 - [x] Host the frontend on Github Pages, Heroku, Netlify, Fleek or Surge. Include the address in the project README.
-- [ ] Include clear instructions on:
-  - [ ] Installing dependencies
-  - [ ] Accessing or running your project
-  - [ ] Running the smart contract unit tests (which port a local testnet should be running on).
+- Include clear instructions on:
+  - [x] Installing dependencies
+  - [x] Accessing or running your project
+  - [x] Running the smart contract unit tests (which port a local testnet should be running on).
 - [ ] Screencast of you walking through the project, including submitting transactions and seeing the updated state. Include link to recording in README.
-- [ ] Instruct the user how to populate the .env file with the required information.
-- [ ] The github repo should be named: https://github.com/YOUR_GITHUB_USERNAME_HERE/blockchain-developer-bootcamp-final-project
+- [x] Instruct the user how to populate the .env file with the required information.
+- [x] The github repo should be named: https://github.com/YOUR_GITHUB_USERNAME_HERE/blockchain-developer-bootcamp-final-project
 
 # README
 
@@ -96,6 +96,8 @@ Deploy the contract
 ```
 truffle migrate --network development --reset
 ```
+
+**Important:** After redeploying you will need to add the new address of NftMinter contract and to AppContext.js (line 12)
 
 ### Deploying to the rinkeby testnet
 
