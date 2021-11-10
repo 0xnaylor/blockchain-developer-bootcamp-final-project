@@ -25,7 +25,7 @@ export const useMintToken = () => {
   };
 
   const mint = async () => {
-    console.log('mint function called');
+    console.log('mint function called using account: ', account);
     if (account && isValidNetwork) {
       try {
         const txn = await contract.mintNFT();
@@ -39,6 +39,7 @@ export const useMintToken = () => {
         console.log(error);
       }
     }
+    console.log('didnt attemp contract call');
   };
 
   useEffect(() => {

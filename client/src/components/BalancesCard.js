@@ -18,7 +18,7 @@ const BalanceCard = () => {
 
   return (
     <Card style={{ maxWidth: 300 }}>
-      <Text block color={colors.green}>
+      <Text block color={colors.black}>
         ETH balance: {ethBalance}
       </Text>
     </Card>

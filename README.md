@@ -21,7 +21,7 @@
   - [x] Displays infomation from your smart contract
   - [x] Allows a user to submit a transaction to update the smart contract state
   - [x] Updates the frontend if the transaction is successful or not.
-- [ ] Host the frontend on Github Pages, Heroku, Netlify, Fleek or Surge. Include the address in the project README.
+- [x] Host the frontend on Github Pages, Heroku, Netlify, Fleek or Surge. Include the address in the project README.
 - [ ] Include clear instructions on:
   - [ ] Installing dependencies
   - [ ] Accessing or running your project
@@ -32,31 +32,102 @@
 
 # README
 
-Application Ui can be found here:
-
-https://618c0f1bea88700007f11808--silly-poincare-c82224.netlify.app/#/
-
 ## Prioject description
 
 Mint an NFT
 Fully on-chain
 
-After downloading the repo run `npm install`
+## Accessing the UI:
+
+The frontend has already been deployed on Netlify and canm be accessed here:
+https://618c0f1bea88700007f11808--silly-poincare-c82224.netlify.app/#/
+
+## How to spin up the dapp locally:
+
+To start the dapp locally requires two spearate tasks:
+
+- Starting the frontend
+- Deploying the smart contract to either a development blockchain or a testnet such as Rinkeby.
+
+### Starting the frontend
+
+Navigate to the `client` directory:
+
+```
+cd client
+```
+
+Install the dependencies
+
+```
+npm install
+```
+
+Start the application
+
+```
+npm run start
+```
+
+In the browser, visit:
+
+localhost:3000
+
+## Deploying the smart contract
+
+In a new terminal, navigate to the project root and install the projects dependencies
+
+```
+npm install
+```
+
+Also install ganache-cli
+
+```
+npm install -g ganache-cli
+```
+
+### Deploying to a local dev network
+
+Note: connecting to the contract instance running on the Rinkeby testnet will show etherscan and opensea links upon successful minting.
+
+To spin up a local development blockchain run the provided script (in the project root directory):
+
+```
+sudo scripts/start_gananche_cli.sh
+```
+
+Then deploy the contract
+
+```
+truffle migrate --network development --reset
+```
+
+### Deploying to the rinkeby testnet
 
 Create a .env file in the projects root directory and add the following:
 
 - Your metamask seed
 - Infura URL including API key.
 
+Example:
+
+```
+MNEMONIC="This is not a real seed phrase as that would be silly"
+INFURA_URL="https://rinkeby.infura.io/v3/a87687a687ddgy8686sss"
+```
+
+Then deploy the contract
+
+```
+truffle migrate --network rinkeby --reset
+```
+
+**Important:** After redeploying you will need to add the new address of NftMinter contract and to AppContext.js (line 12)
+
 ## Running the test suite
 
-To start up ganache-cli run the provided script:
-
-```
-sudo scripts/start_gananche_cli.sh
-```
-
-sudo is required because the script creates a log file that can be found here: /var/log/ganache.log
+sudo is required because the script creates a log file (/var/log/ganache.log) so needs write permission.
 
 To run the test suite simple enter the following command:
 
@@ -69,23 +140,6 @@ To generate a test coverage report run the following command:
 ```
 truffle run coverage
 ```
-
-## Starting the application:
-
-To manually start the dapp, run the following commands
-
-```
-cd client
-npm run start
-```
-
-To redeploy the dapp run the following command:
-
-```
-truffle migrate --network rinkeby --reset
-```
-
-**Important:** After redeploying you will need to add the new address of NftMinter contract and to AppContext.js (line 12)
 
 ## Extra functionality to add if there is time.
 

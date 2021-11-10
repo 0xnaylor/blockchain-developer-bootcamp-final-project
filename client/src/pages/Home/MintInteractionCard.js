@@ -13,6 +13,7 @@ import { injected } from '../../connectors';
 import { useContract } from '../../hooks/useContract';
 import NftMinterJSON from '../../contracts/NftMinter.json';
 
+const ConnectBtn = styled(Button).attrs({ variant: 'outline-dark' })``;
 const contractABI = NftMinterJSON.abi;
 
 const Container = styled.div`
@@ -28,7 +29,7 @@ const Container = styled.div`
 `;
 
 const MintInteractionCard = () => {
-  const { active, activate } = useWeb3React();
+  const { active, activate, chainId } = useWeb3React();
   const {
     txnStatus,
     setTxnStatus,
@@ -126,19 +127,18 @@ const MintInteractionCard = () => {
   const renderNotConnectedContainer = () => (
     <>
       <p>Quick! Connect wallet to see if there are any left! I hear them coming!</p>
-      <button onClick={connectWallet} className="cta-button connect-wallet-button">
+      <ConnectBtn onClick={connectWallet} className="cta-button connect-wallet-button">
         Connect
-      </button>
+      </ConnectBtn>
     </>
   );
-  // onClick={connectWallet}
 
   const renderMintUI = () => (
     <div>
       <p>{minted}/3000 claimed...</p>
-      <button onClick={handleMintClick} className="cta-button mint-button">
-        Mint NFT
-      </button>
+      <ConnectBtn onClick={handleMintClick} className="cta-button mint-button">
+        Claim Yours
+      </ConnectBtn>
     </div>
   );
 
