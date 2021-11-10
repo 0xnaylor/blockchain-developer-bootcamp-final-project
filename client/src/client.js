@@ -1,16 +1,15 @@
 import React from 'react';
 import { hydrate, render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import App from './App';
 
 const renderMethod = module.hot ? render : hydrate;
 
 export const Client = () => {
   return (
-    <BrowserRouter>
-          <App />
-
-    </BrowserRouter>
+    <HashRouter>
+      <App />
+    </HashRouter>
   );
 };
 
