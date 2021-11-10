@@ -30,7 +30,8 @@ contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Owna
 
     /// @dev We split the SVG at the part where it asks for the background color.
     string svgPartOne = "<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'><style>.base { fill: white; font-family: serif; font-size: 24px; }</style><rect width='100%' height='100%' fill='";
-    string svgPartTwo = "'/><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+    // string svgPartTwo = "'/><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
+    string svgPartTwo = "'/>";
 
     string[] weapon = ["Crossbow", "Shotgun", "Sword", "Bat", "Crowbar", "slingshot"];
     string[] transport = ["Motorbike", "Car", "Bicycle", "RV", "Walking", "Helicopter"];
@@ -138,6 +139,20 @@ contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Owna
         return super.tokenURI(tokenId);
     }
 
+    function createItem(string memory claimedItem, uint itemNumber) internal pure returns (string memory) {
+        string memory position;
+        if(itemNumber == 1) {
+            position = "40%";
+        } else if (itemNumber == 2) {
+            position = "50%";
+        } else {
+            position = "60%";
+        }
+        
+        return string(abi.encodePacked("<text x='50%' y='", position, "' class='base' dominant-baseline='middle' text-anchor='middle'>", claimedItem, "</text>"));
+    }
+    
+
     /// @notice mint an ERC721 token on the contract. The caller will receive a token containing a survival kit that includes a weapon, a transport and an item. All are randomly selected.  
     /// @dev currently does not accept payment
     /// @dev this function creates and stores the tokens URI. This is a JSON string constisting of name, description and image fields. The image is a BASE64 encoded SVG. Finally The whole JSON metadata string is BASE64 encoded and mapped to the tokenId.
@@ -157,7 +172,13 @@ contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Owna
 
         // Add the random color in.
         string memory randomColor = pickRandomBackgroundColour(newItemId);
-        string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, completeKit, "</text></svg>"));
+        // string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, completeKit, "</text></svg>"));
+        string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, 
+        createItem(selectedWeapon, 1), 
+        createItem(selectedTransport, 2), 
+        createItem(selectedItem, 3), 
+        "</svg>"));
+
         console.log("finalSvg: ", finalSvg);
 
         // get all the JSON metadata in place and base64 encode it

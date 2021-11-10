@@ -9,7 +9,7 @@ const initialContext = {
   setOpenseaLink: () => {},
   transactionHash: '',
   setTransactionHash: () => {},
-  contractAddress: '0xc50Cc0FBbf60b8708E1d6CA8acE7B50429e22aC8',
+  contractAddress: '0x7905D0D39472BcA16398BE9D3C80D90B9A61a1a1',
   setContractAddress: () => {},
   minted: 0,
   setMinted: () => {},

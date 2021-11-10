@@ -135,7 +135,7 @@ const MintInteractionCard = () => {
 
   const renderMintUI = () => (
     <div>
-      <p>{minted}/3000 minted...</p>
+      <p>{minted}/3000 claimed...</p>
       <button onClick={handleMintClick} className="cta-button mint-button">
         Mint NFT
       </button>

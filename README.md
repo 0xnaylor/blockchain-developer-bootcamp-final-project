@@ -32,6 +32,10 @@
 
 # README
 
+Application Ui can be found here:
+
+https://618c0f1bea88700007f11808--silly-poincare-c82224.netlify.app/#/
+
 ## Prioject description
 
 Mint an NFT
