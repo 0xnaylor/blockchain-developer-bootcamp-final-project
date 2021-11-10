@@ -41,15 +41,6 @@ const MintInteractionCard = () => {
   const { mint, setupEventListener, getMinted } = useMintToken();
   const [minted, setMinted] = useState(0);
 
-  // const { minted } = useAppContext();
-  // setContractAddress('0x70abcAdbaBC95ADDc954Ba3d1cbfD4e9EEe2E767');
-
-  // const setupContract = () => {
-  //   if (active) {
-  //     const contract = useContract(contractAddress, contractABI);
-  //   }
-  // };
-
   useEffect(() => {
     setupEventListener();
   }, [active]);
@@ -134,7 +125,7 @@ const MintInteractionCard = () => {
 
   const renderNotConnectedContainer = () => (
     <>
-      <p>Please connect wallet to see if there are any mints left</p>
+      <p>Quick! Connect wallet to see if there are any left! I hear them coming!</p>
       <button onClick={connectWallet} className="cta-button connect-wallet-button">
         Connect
       </button>
@@ -154,18 +145,12 @@ const MintInteractionCard = () => {
   async function renderMinted() {
     console.log('renderMinted minted: ', await getMinted());
     setMinted(await getMinted());
-
-    // return await getMinted();
-    // setMinted(getMinted());
-    // const { val } = await minted.then((result) => result.data);
-    // console.log('val: ', val);
   }
 
   return (
     <Container show>
       <Card style={{ maxWidth: 420, minHeight: 400 }}>
-        <p className="sub-text">Each unique. Each beautiful. Discover your NFT today.</p>
-        {/* <p className="sub-text">{minted}/3000 minted</p> */}
+        <p className="sub-text">Grab your survival kit before its too late!</p>
         <div className="header gradient-text">{active ? renderMintUI() : renderNotConnectedContainer()}</div>
       </Card>
     </Container>
