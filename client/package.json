@@ -1,12 +1,10 @@
 {
-  "name": "consensys-hackathon-build-a-dapp",
+  "name": "blockchain-developer-bootcamp-final-project",
   "homepage": "https://github.com/bnaylor1989/blockchain-developer-bootcamp-final-project",
   "version": "1.0.0",
   "license": "UNLICENSED",
   "scripts": {
     "start": "razzle start",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "build": "razzle build --noninteractive "
   },
   "dependencies": {
