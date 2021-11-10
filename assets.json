@@ -1,0 +1,32 @@
+{
+  "client": {
+    "css": [
+      "/static/css/client.a8a64bbc.css"
+    ],
+    "js": [
+      "/static/js/client.86411c27.js"
+    ],
+    "map": [
+      "/static/css/client.a8a64bbc.css.map",
+      "/static/js/client.86411c27.js.map"
+    ],
+    "chunks": [
+      0
+    ]
+  },
+  "noentry": {
+    "ico": [
+      "/favicon.ico"
+    ],
+    "html": [
+      "/index.html"
+    ],
+    "txt": [
+      "/robots.txt",
+      "/static/js/client.86411c27.js.LICENSE.txt"
+    ],
+    "svg": [
+      "/static/media/metamask-logo.fd681d4a.svg"
+    ]
+  }
+}
