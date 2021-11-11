@@ -1,5 +1,0 @@
-Discovered a project that is already doing this.
-Research how they have achieved this and whether I can build a slimmed down version.
-https://www.renft.io/
-Founf the contract code at: https://etherscan.io/address/0x94d8f036a0fbc216bb532d33bdf6564157af0cd7#code
-
