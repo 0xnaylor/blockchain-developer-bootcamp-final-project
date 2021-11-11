@@ -2,10 +2,10 @@
 
 ### What should be in the README
 
-- [ ] Description of the project and what it does
-- [ ] Description of the directory structure
-- [ ] How to access the frontend of the project.
-- [ ] Include public Ethereum account address to recieve the certifcation as an NFT
+- [x] Description of the project and what it does
+- [x] Description of the directory structure
+- [x] How to access the frontend of the project.
+- [x] Include public Ethereum account address to recieve the certifcation as an NFT
 
 ### Project requirements
 
@@ -32,10 +32,34 @@
 
 # README
 
+## Public Ethereum Accounts (for NFT certification):
+
+mainnet: 0x688625577399Bca4AdEb8e3574195A89D7ad65E2
+rinkeby: 0x7Ed65bf3e8fABCd88347abB4B6aE470ADB909123
+
 ## Prioject description
 
-Mint an NFT
-Fully on-chain
+The idea behind the dapp is that it would be part of a zombie apocalypse survival game. Using this dapp players are able to mint an NFT that represents their survival kit.
+A survival kit consists of a randomly generated combination of:
+
+- A weapon
+- A vehicle
+- An item
+
+The NFTs are fully on-chain.
+After connecting their metamask wallet the UI will tell the player how many survival kits (NFTs) are remaining on the contract and give them the option to mint one.
+
+## Directory Structure
+
+The root directory of the project contains the following sub-directories:
+
+- client: contains all the frontend code, including all dependencies and configuration.
+- contracts: contains all the solidity code. Also contains another sub-directory called "libraries" which holds a Base64.sol library.
+- coverage: contains all the file related to the solidity-coverage plugin.
+- migrations: contains the migration scripts for deploying solidity contracts to the blockchain.
+- node_modules: contains all smart contract dependencies
+- scripts: contains the 'start_ganache_cli.sh' script for starting up a local development blockchain. (Required to run unit tests)
+- tests - contains the smart contract unit tests (written in javascript). Also includes a utils sub-directory.
 
 ## Accessing the UI:
 
@@ -150,3 +174,4 @@ truffle run coverage
 - Add an alert to the UI if you are not connected to the right network
 - Remember to remove all console logs from both front end and back end before submission
 - Add a note in this README about the time delay being able to see the metadata on OpenSea.
+- useEagerConnect
