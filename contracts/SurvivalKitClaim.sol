@@ -79,6 +79,18 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         return _tokenIds.current();
     }
 
+    /// @returns a uint representing the balance (in wei) held by the contract.
+    function balanceOfContract()  public view returns(uint){
+        return address(this).balance;
+    }
+
+    /// @notice allows the contract owner to withdraw the funds currently being held by the contract. 
+    function withdrawContractFunds()  public payable onlyOwner {
+        address _to = msg.sender;
+        (bool sent, bytes memory data) = _to.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
+    }
+
     /// @notice pick a random weappon to equip the player with
     /// @dev the randomness could be improved by using an oracle feed.
     /// @param tokenId used to seed the random function
@@ -158,6 +170,7 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
     /// @dev this function creates and stores the tokens URI. This is a JSON string constisting of name, description and image fields. The image is a BASE64 encoded SVG. Finally The whole JSON metadata string is BASE64 encoded and mapped to the tokenId.
     function mintNFT() public whenNotPaused{
         require(_tokenIds.current() <= supplyCap, "There are no NFTs left to mint");
+        require(msg.value >= 10, "Not enough ETH sent; check price!");
         
         // get the current tokenId, this starts at 0
         uint newItemId = _tokenIds.current();
