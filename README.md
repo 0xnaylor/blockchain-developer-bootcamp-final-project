@@ -97,7 +97,7 @@ Deploy the contract
 truffle migrate --network development --reset
 ```
 
-**Important:** After redeploying you will need to add the new address of NftMinter contract and to AppContext.js (line 12)
+**Important:** After redeploying you will need to add the new address of SurvivalKitClaim contract and to AppContext.js (line 12)
 
 ### Deploying to the rinkeby testnet
 
@@ -119,7 +119,7 @@ Then deploy the contract
 truffle migrate --network rinkeby --reset
 ```
 
-**Important:** After redeploying you will need to add the new address of NftMinter contract and to AppContext.js (line 12)
+**Important:** After redeploying you will need to add the new address of SurvivalKitClaim contract and to AppContext.js (line 12)
 
 ## Running the test suite
 

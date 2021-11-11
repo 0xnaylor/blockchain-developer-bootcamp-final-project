@@ -20,7 +20,7 @@ import { Base64 } from "./libraries/Base64.sol";
 @notice This contract currently only handles free mints. No payment is taken.
 
  */
-contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable {
+contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable {
 
     uint private supplyCap = 3000;
 
@@ -33,10 +33,10 @@ contract NftMinter is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Owna
     // string svgPartTwo = "'/><text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'>";
     string svgPartTwo = "'/>";
 
-    string[] weapon = ["Crossbow", "Shotgun", "Sword", "Bat", "Crowbar", "slingshot"];
-    string[] transport = ["Motorbike", "Car", "Bicycle", "RV", "Walking", "Helicopter"];
-    string[] item = ["Torch", "SurvivalKit", "MedicalKit", "Radio", "Map", "Wistle"];
-    string[] colors = ["red", "#08C2A8", "black", "yellow", "blue", "green"];
+    string[] weapon = ["Crossbow", "Shotgun", "Samuri Sword", "Baseball Bat", "Crowbar", "slingshot", "Axe", "Katana", "Sledge Hammer", "Machete", "Handgun", "Kunckle Duster", "Rifle", "Tomahawk", "Pointy Stick"];
+    string[] transport = ["Motorbike", "Car", "Bicycle", "Jeep", "On Foot", "Helicopter", "Boat", "Skateboard", "Rollerblades", "Scooter"];
+    string[] item = ["Torch", "Animal Snare", "Medicine", "Radio", "Map", "Wistle", "Candle", "Walkie-Talkie", "Water Bottle", "Water Purification Tablets", "Gloves", "Binoculars", "Watch", "Food Rations"];
+    string[] colors = ["red", "black", "blue", "green", "indigo", "grey"];
 
     /// @notice Event to be emitted after a successful mint
     /// @param sender The address of the transaction sender

@@ -19,7 +19,7 @@ BRF:2
 BRH:1
 end_of_record
 TN:
-SF:/Users/bennaylor/Development/Consensys Academy/blockchain-developer-bootcamp-final-project/contracts/NftMinter.sol
+SF:/Users/bennaylor/Development/Consensys Academy/blockchain-developer-bootcamp-final-project/contracts/SurvivalKitClaim.sol
 FN:33,constructor
 FN:37,getRemainingMints
 FN:41,getTotalNFTsMintedSoFar

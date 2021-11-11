@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import NftMinterJSON from '../contracts/NftMinter.json';
+import SurvivalKitClaimJSON from '../contracts/SurvivalKitClaim.json';
 import { useWeb3React } from '@web3-react/core';
 import { useContract } from './useContract';
 import { useAppContext } from '../AppContext';
@@ -9,7 +9,7 @@ export const useMintToken = () => {
   const { library, account, chainId, active } = useWeb3React();
   const { isValidNetwork } = useIsValidNetwork();
   const { setTxnStatus, setOpenseaLink, setTransactionHash, contractAddress, setMinted } = useAppContext();
-  const contractABI = NftMinterJSON.abi;
+  const contractABI = SurvivalKitClaimJSON.abi;
 
   const contract = useContract(contractAddress, contractABI);
 

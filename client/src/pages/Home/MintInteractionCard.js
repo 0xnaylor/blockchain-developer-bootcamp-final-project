@@ -3,18 +3,13 @@ import styled from 'styled-components';
 import Text from '../../components/Text';
 import Card from '../../components/Card';
 import Button from 'react-bootstrap/Button';
-import { colors } from '../../theme';
-import { useAppContext } from '../../AppContext';
 import Spinner from 'react-bootstrap/Spinner';
 import useTransaction from '../../hooks/useTransaction';
 import { useWeb3React } from '@web3-react/core';
 import { useMintToken } from '../../hooks/useMintToken';
 import { injected } from '../../connectors';
-import { useContract } from '../../hooks/useContract';
-import NftMinterJSON from '../../contracts/NftMinter.json';
 
 const ConnectBtn = styled(Button).attrs({ variant: 'outline-dark' })``;
-const contractABI = NftMinterJSON.abi;
 
 const Container = styled.div`
   display: flex;
@@ -79,11 +74,12 @@ const MintInteractionCard = () => {
       <Container show>
         <Card style={{ maxWidth: 420, minHeight: 400 }}>
           <Text block center className="mb-5">
-            Txn Was successful!
+            Your claim was successful
           </Text>
-          <p>You can view your purchase by browsing to your account on Opeansea</p>
-          <br />
-          <p>Or by following this link:</p>
+          <p>
+            You can view your kit on Opensea using the link below. Now get out of here they are almost upon you! I hope
+            you got a fast vehicle!
+          </p>
           <br />
           <a href={openseaLink} target="_blank" rel="noopener noreferrer">
             Opensea
@@ -126,7 +122,10 @@ const MintInteractionCard = () => {
 
   const renderNotConnectedContainer = () => (
     <>
-      <p>Quick! Connect wallet to see if there are any left! I hear them coming!</p>
+      <p>
+        Quick! Connect wallet to see if there are any left! I hear them coming! You will recieve a weapon, transport and
+        an item.
+      </p>
       <ConnectBtn onClick={connectWallet} className="cta-button connect-wallet-button">
         Connect
       </ConnectBtn>
@@ -150,7 +149,7 @@ const MintInteractionCard = () => {
   return (
     <Container show>
       <Card style={{ maxWidth: 420, minHeight: 400 }}>
-        <p className="sub-text">Grab your survival kit before its too late!</p>
+        <p className="sub-text">The zombie horde is approaching fast. Grab your survival kit before its too late!</p>
         <div className="header gradient-text">{active ? renderMintUI() : renderNotConnectedContainer()}</div>
       </Card>
     </Container>

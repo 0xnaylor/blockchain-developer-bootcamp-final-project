@@ -1,4 +1,4 @@
-const NftMinter = artifacts.require("NftMinter");
+const SurvivalKitClaim = artifacts.require("SurvivalKitClaim");
 const BN = require("bn.js");
 const toBN = web3.utils.toBN;
 const Chance = require("chance");
@@ -10,7 +10,7 @@ const {
   expectRevert,
 } = require("@openzeppelin/test-helpers");
 
-contract("NftMinter Test Suite", function (accounts) {
+contract("SurvivalKitClaim Test Suite", function (accounts) {
   "use strict";
 
   const EventNames = {
@@ -26,7 +26,7 @@ contract("NftMinter Test Suite", function (accounts) {
   before(async () => {
     await unlockAccounts();
     [chance, admin, name, symbol, supply] = await createFixtures();
-    contract = await NftMinter.new(name, symbol, supply, {
+    contract = await SurvivalKitClaim.new(name, symbol, supply, {
       from: admin,
     });
 
