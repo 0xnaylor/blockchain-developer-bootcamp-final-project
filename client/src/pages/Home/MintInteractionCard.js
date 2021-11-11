@@ -123,8 +123,8 @@ const MintInteractionCard = () => {
   const renderNotConnectedContainer = () => (
     <>
       <p>
-        Quick! Connect wallet to see if there are any left! I hear them coming! You will recieve a weapon, transport and
-        an item.
+        Quick! Connect your wallet to see if there are any left! I hear them coming! You will recieve a weapon,
+        transport and an item.
       </p>
       <ConnectBtn onClick={connectWallet} className="cta-button connect-wallet-button">
         Connect

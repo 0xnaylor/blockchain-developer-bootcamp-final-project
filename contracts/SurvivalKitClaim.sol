@@ -170,7 +170,7 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
     /// @dev this function creates and stores the tokens URI. This is a JSON string constisting of name, description and image fields. The image is a BASE64 encoded SVG. Finally The whole JSON metadata string is BASE64 encoded and mapped to the tokenId.
     function mintNFT() public payable whenNotPaused{
         require(_tokenIds.current() <= supplyCap, "There are no NFTs left to mint");
-        require(msg.value >= 1000, "Not enough ETH sent; check price!");
+        require(msg.value >= 10000000000000000, "Not enough ETH sent; check price!");
         
         // get the current tokenId, this starts at 0
         uint newItemId = _tokenIds.current();
