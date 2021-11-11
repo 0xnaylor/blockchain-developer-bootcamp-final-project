@@ -135,6 +135,7 @@ const MintInteractionCard = () => {
   const renderMintUI = () => (
     <div>
       <p>{minted}/3000 claimed...</p>
+      <p>Price: 0.01 Eth</p>
       <ConnectBtn onClick={handleMintClick} className="cta-button mint-button">
         Claim Yours
       </ConnectBtn>
