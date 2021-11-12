@@ -4,9 +4,7 @@
 
 The contract code in this project uses a specific compiler version: 0.8.0
 
-## Proper use of require, assert and revert
-
-### Require
+## Proper use of require
 
 The contract makes use of a modifier supplied by the Ownable module.
 
@@ -25,3 +23,7 @@ In both these cases require() is used to test a transaction input. It acts as a 
 ## Use Modifiers Only for Validations
 
 The onlyOwner modifier only does validation on the message sender. There are no external calls within it.
+
+## Proper use of .call
+
+Both the withdrawAllFunds() and withdrawFunds() functions make use of .call() rather than transfer() or send() as this avoids the fixed gas limit of 2300 imposed by the transfer/send functions.

@@ -85,9 +85,14 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
     }
 
     /// @notice allows the contract owner to withdraw the funds currently being held by the contract. 
-    function withdrawContractFunds()  public payable onlyOwner {
-        address _to = msg.sender;
-        (bool sent, bytes memory data) = _to.call{value: address(this).balance}("");
+    function withdrawAllFunds()  public payable onlyOwner {
+        (bool sent, ) = msg.sender.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
+    }
+
+    /// @notice allows the contract owner to withdraw the funds currently being held by the contract. 
+    function withdrawFunds(uint amount)  public payable onlyOwner {
+        (bool sent, ) = msg.sender.call{value: amount}("");
         require(sent, "Failed to send Ether");
     }
 
