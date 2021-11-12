@@ -79,6 +79,23 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         return _tokenIds.current();
     }
 
+    /// @return a uint representing the balance (in wei) held by the contract.
+    function balanceOfContract()  public view returns(uint){
+        return address(this).balance;
+    }
+
+    /// @notice allows the contract owner to withdraw the funds currently being held by the contract. 
+    function withdrawAllFunds()  public payable onlyOwner {
+        (bool sent, ) = msg.sender.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
+    }
+
+    /// @notice allows the contract owner to withdraw the funds currently being held by the contract. 
+    function withdrawFunds(uint amount)  public payable onlyOwner {
+        (bool sent, ) = msg.sender.call{value: amount}("");
+        require(sent, "Failed to send Ether");
+    }
+
     /// @notice pick a random weappon to equip the player with
     /// @dev the randomness could be improved by using an oracle feed.
     /// @param tokenId used to seed the random function
@@ -156,8 +173,9 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
     /// @notice mint an ERC721 token on the contract. The caller will receive a token containing a survival kit that includes a weapon, a transport and an item. All are randomly selected.  
     /// @dev currently does not accept payment
     /// @dev this function creates and stores the tokens URI. This is a JSON string constisting of name, description and image fields. The image is a BASE64 encoded SVG. Finally The whole JSON metadata string is BASE64 encoded and mapped to the tokenId.
-    function mintNFT() public whenNotPaused{
+    function mintNFT() public payable whenNotPaused{
         require(_tokenIds.current() <= supplyCap, "There are no NFTs left to mint");
+        require(msg.value >= 10000000000000000, "Not enough ETH sent; check price!");
         
         // get the current tokenId, this starts at 0
         uint newItemId = _tokenIds.current();

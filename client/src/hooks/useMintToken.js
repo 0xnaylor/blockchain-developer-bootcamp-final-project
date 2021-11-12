@@ -4,13 +4,14 @@ import { useWeb3React } from '@web3-react/core';
 import { useContract } from './useContract';
 import { useAppContext } from '../AppContext';
 import useIsValidNetwork from './useIsValidNetwork';
+import { formatUnits, parseEther } from '@ethersproject/units';
+import { BigNumber } from 'bignumber.js';
 
 export const useMintToken = () => {
   const { library, account, chainId, active } = useWeb3React();
   const { isValidNetwork } = useIsValidNetwork();
   const { setTxnStatus, setOpenseaLink, setTransactionHash, contractAddress, setMinted } = useAppContext();
   const contractABI = SurvivalKitClaimJSON.abi;
-
   const contract = useContract(contractAddress, contractABI);
 
   const setupEventListener = async () => {
@@ -26,9 +27,14 @@ export const useMintToken = () => {
 
   const mint = async () => {
     console.log('mint function called using account: ', account);
+    console.log('chainId: ', chainId);
+    const mintFee = new BigNumber(10000000000000000);
     if (account && isValidNetwork) {
       try {
-        const txn = await contract.mintNFT();
+        const txn = await contract.mintNFT({
+          from: account,
+          value: parseEther('0.01'),
+        });
         console.log('txn hash: ', txn.hash);
         setTransactionHash(txn.hash);
         setTxnStatus('MINING');
