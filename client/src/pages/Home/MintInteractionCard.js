@@ -90,7 +90,8 @@ const MintInteractionCard = () => {
           <a href={`https://rinkeby.etherscan.io/tx/${transactionHash}`} target="_blank" rel="noopener noreferrer">
             etherscan
           </a>
-          <Button
+          <ConnectBtn
+            className="cta-button connect-wallet-button"
             onClick={() => {
               setTxnStatus('NOT_SUBMITTED');
               setOpenseaLink('');
@@ -98,7 +99,7 @@ const MintInteractionCard = () => {
             }}
           >
             Go Back
-          </Button>
+          </ConnectBtn>
         </Card>
       </Container>
     );
@@ -126,6 +127,12 @@ const MintInteractionCard = () => {
   };
 
   const connectWallet = async () => {
+    // check to see if metamask is installed
+    if (!ethereum) {
+      swal({ text: 'Please install metamask before continuing' });
+      return;
+    }
+
     activate(injected);
     ethereum.on('chainChanged', handleChainChanged);
     const chainId = await ethereum.request({ method: 'eth_chainId' });
