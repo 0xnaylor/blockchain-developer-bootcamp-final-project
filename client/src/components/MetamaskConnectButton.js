@@ -5,9 +5,8 @@ import { useWeb3React } from '@web3-react/core';
 import MMLogo from '../static/metamask-logo.svg';
 import Text from './Text';
 import Card from './Card';
-import { injected } from '../connectors';
 import { shortenAddress } from '../utils/shortenAddress';
-import swal from 'sweetalert';
+import { useWalletConnection } from '../hooks/useWalletConnection';
 
 const MetamaskLogo = styled.img.attrs({
   src: MMLogo,
@@ -15,30 +14,11 @@ const MetamaskLogo = styled.img.attrs({
   height: 40px;
 `;
 
-const RINKEBY_CHAIN_ID = '0x4';
-
 const ConnectBtn = styled(Button).attrs({ variant: 'outline-dark' })``;
 
 const MetamaskConnectButton = () => {
-  const { activate, active, account, deactivate, chainId } = useWeb3React();
-
-  // const connectMetamask = () => {
-  //   if (chainId !== RINKEBY_CHAIN_ID) {
-  //     swal('Whoops! Wrong Network', 'Please make sure you are connected to the Rinkeby Test Network!');
-  //     return;
-  //   }
-  //   activate(injected);
-  // };
-
-  const connectWallet = async () => {
-    activate(injected);
-    if (chainId !== RINKEBY_CHAIN_ID) {
-      console.log('Chain ID detected: ', chainId, ' Should be: ', RINKEBY_CHAIN_ID);
-      const { ethereum } = window;
-      swal('Whoops! Wrong Network', 'Please make sure you are connected to the Rinkeby Test Network!');
-      await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: RINKEBY_CHAIN_ID }] });
-    }
-  };
+  const { active, account, deactivate } = useWeb3React();
+  const { connectWallet } = useWalletConnection();
 
   if (active) {
     return (

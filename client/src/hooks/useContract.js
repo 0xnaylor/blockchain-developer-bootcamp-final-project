@@ -1,14 +1,9 @@
 import { useMemo } from 'react';
-import {
-  Contract,
-  // ContractInterface
-} from '@ethersproject/contracts';
+import { Contract } from '@ethersproject/contracts';
 import { AddressZero } from '@ethersproject/constants';
 import { useWeb3React } from '@web3-react/core';
 
 export function useContract(contractAddress, ABI) {
-  // console.log(`useContract called with address: ${contractAddress} and ABI: ${ABI}.`);
-
   if (contractAddress === AddressZero) {
     throw Error(`Invalid 'contractAddress' parameter '${contractAddress}'.`);
   }
