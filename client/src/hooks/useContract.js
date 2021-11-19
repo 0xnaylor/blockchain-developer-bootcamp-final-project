@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { ethers } from 'ethers';
 import {
   Contract,
   // ContractInterface
@@ -16,13 +15,7 @@ export function useContract(contractAddress, ABI) {
 
   const { library, account, provider } = useWeb3React();
 
-  // const signerOrProvider = ethers.getDefaultProvider();
-  console.log('account: ', account);
-  console.log('library: ', library);
-
   const signerOrProvider = account ? library.getSigner(account).connectUnchecked() : library;
-
-  console.log('signerOrProvider', signerOrProvider);
 
   return useMemo(() => {
     return new Contract(contractAddress, ABI, signerOrProvider);

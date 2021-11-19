@@ -15,27 +15,21 @@ export const useMintToken = () => {
   const contract = useContract(contractAddress, contractABI);
 
   const setupEventListener = async () => {
-    console.log('setupEventListener called');
     if (active) {
       contract.on('SurvivalKitNftClaimed', (from, tokenId) => {
         setOpenseaLink(`https://testnets.opensea.io/assets/${contractAddress}/${tokenId.toNumber()}`);
       });
     }
-
-    console.log('Setup event listener!');
   };
 
   const mint = async () => {
-    console.log('mint function called using account: ', account);
-    console.log('chainId: ', chainId);
-    const mintFee = new BigNumber(10000000000000000);
+    const mintFee = new BigNumber(10000000000000000); // 0.01 ETH
     if (account && isValidNetwork) {
       try {
         const txn = await contract.mintNFT({
           from: account,
           value: parseEther('0.01'),
         });
-        console.log('txn hash: ', txn.hash);
         setTransactionHash(txn.hash);
         setTxnStatus('MINING');
         await txn.wait(1);
@@ -45,17 +39,10 @@ export const useMintToken = () => {
         console.log(error);
       }
     }
-    console.log('didnt attemp contract call');
   };
-
-  useEffect(() => {
-    console.log('useMintToken render');
-  });
 
   const getMinted = async () => {
     const minted = await contract.getTotalNFTsMintedSoFar();
-    // console.log('getMinted called from useMintToken hook: ', minted.toNumber());
-    // return minted.toNumber();
     return minted.toNumber();
   };
 

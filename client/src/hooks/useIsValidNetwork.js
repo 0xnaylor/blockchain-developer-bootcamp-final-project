@@ -7,7 +7,6 @@ function useIsValidNetwork() {
   const { chainId } = useWeb3React();
 
   const isSupportedNetwork = useMemo(() => {
-    console.log('chainId: ', chainId);
     return supportedNetworks.includes(chainId);
   }, [chainId]);
 

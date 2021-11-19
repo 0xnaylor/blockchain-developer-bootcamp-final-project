@@ -8,8 +8,12 @@ import useTransaction from '../../hooks/useTransaction';
 import { useWeb3React } from '@web3-react/core';
 import { useMintToken } from '../../hooks/useMintToken';
 import { injected } from '../../connectors';
+import swal from 'sweetalert';
+import { ethers } from 'ethers';
 
 const ConnectBtn = styled(Button).attrs({ variant: 'outline-dark' })``;
+const RINKEBY_CHAIN_ID = '0x4';
+const { ethereum } = window;
 
 const Container = styled.div`
   display: flex;
@@ -24,7 +28,8 @@ const Container = styled.div`
 `;
 
 const MintInteractionCard = () => {
-  const { active, activate, chainId } = useWeb3React();
+  let { active, activate, chainId, deactivate } = useWeb3React();
+
   const {
     txnStatus,
     setTxnStatus,
@@ -44,12 +49,10 @@ const MintInteractionCard = () => {
   useEffect(() => {
     if (active) {
       renderMinted();
-      console.log('minted called from MintInteractionCard: ', minted);
     }
   });
 
   const handleMintClick = () => {
-    console.log('handleMintClick called');
     mint();
   };
 
@@ -69,7 +72,6 @@ const MintInteractionCard = () => {
   }
 
   if (txnStatus === 'COMPLETE') {
-    console.log('Opensea Link: ', openseaLink);
     return (
       <Container show>
         <Card style={{ maxWidth: 420, minHeight: 400 }}>
@@ -116,8 +118,29 @@ const MintInteractionCard = () => {
     );
   }
 
-  const connectWallet = () => {
+  const handleChainChanged = async (_chainId) => {
+    if (_chainId != '0x4') {
+      swal('Whoops! Wrong Network', 'Please make sure you are connected to the Rinkeby Test Network!');
+      await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: RINKEBY_CHAIN_ID }] });
+    }
+  };
+
+  const connectWallet = async () => {
     activate(injected);
+    ethereum.on('chainChanged', handleChainChanged);
+    const chainId = await ethereum.request({ method: 'eth_chainId' });
+    if (chainId !== RINKEBY_CHAIN_ID) {
+      try {
+        await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: RINKEBY_CHAIN_ID }] });
+        swal('Whoops! Wrong Network', 'Please make sure you are connected to the Rinkeby Test Network!');
+      } catch (e) {
+        if (e.message.includes("'wallet_switchEthereumChain' already pending")) {
+          swal('Please open metamask and switch your network!');
+        } else {
+          console.debug('Error: ', e.message);
+        }
+      }
+    }
   };
 
   const renderNotConnectedContainer = () => (
@@ -143,7 +166,6 @@ const MintInteractionCard = () => {
   );
 
   async function renderMinted() {
-    console.log('renderMinted minted: ', await getMinted());
     setMinted(await getMinted());
   }
 
