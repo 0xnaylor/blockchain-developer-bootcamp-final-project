@@ -17,8 +17,6 @@ import { Base64 } from "./libraries/Base64.sol";
 /**
 @title Zombie Apocalipse Survival kit generator
 @author Ben Naylor
-@notice This contract currently only handles free mints. No payment is taken.
-
  */
 contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable {
 
@@ -142,7 +140,7 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         return uint(keccak256(abi.encodePacked(input)));
     }
 
-    /// @dev overriding this function was required to inherit from ERC721 and ERC721URIStorage
+    /// @dev overriding this function was required to inherit from both ERC721 and ERC721URIStorage
     function _burn(uint256 tokenId) internal whenNotPaused override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
@@ -153,6 +151,11 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         return super.tokenURI(tokenId);
     }
 
+    /// @notice helper function to place items on separate lines. 
+    /// @dev function seems clunky. This should be refactor into a more elegant solution.
+    /// @param claimedItem the name of the item to be added to the NFT.
+    /// @param itemNumber the position in which to display the item in the NFT art.
+    /// @return An SVG string containing the item and its display position in the NFT art. 
     function createItem(string memory claimedItem, uint itemNumber) internal pure returns (string memory) {
         string memory position;
         if(itemNumber == 1) {
@@ -181,11 +184,9 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         string memory selectedWeapon = pickRandomWeapon(newItemId);
         string memory selectedTransport = pickRandomTransport(newItemId);
         string memory selectedItem = pickRandomItem(newItemId);
-        string memory completeKit = string(abi.encodePacked(selectedWeapon, selectedTransport, selectedItem));
 
         // Add the random color in.
         string memory randomColor = pickRandomBackgroundColour(newItemId);
-        // string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, completeKit, "</text></svg>"));
         string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, 
         createItem(selectedWeapon, 1), 
         createItem(selectedTransport, 2), 
@@ -227,6 +228,7 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
+    /// @notice required override in order to inherit from both ERC721 and ERC721Enumerable
     function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }

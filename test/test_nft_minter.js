@@ -149,7 +149,7 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
       );
     });
 
-    it("should fire a 'NewEpicNFTMinted' event after minting", async () => {
+    it("should fire a 'SurvivalKitNftClaimed' event after minting", async () => {
       const currentCount = await contract.totalSupply();
       expectEvent(
         await contract.mintNFT({ from: minter, value: mintFee }),

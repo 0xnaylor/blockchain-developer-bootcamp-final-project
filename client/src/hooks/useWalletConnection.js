@@ -26,11 +26,11 @@ export const useWalletConnection = () => {
     const chainId = await ethereum.request({ method: 'eth_chainId' });
     if (chainId !== RINKEBY_CHAIN_ID) {
       try {
-        await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: RINKEBY_CHAIN_ID }] });
         swal('Whoops! Wrong Network', 'Please make sure you are connected to the Rinkeby Test Network!');
+        await ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: RINKEBY_CHAIN_ID }] });
       } catch (e) {
         if (e.message.includes("'wallet_switchEthereumChain' already pending")) {
-          swal('Please open metamask and switch your network!');
+          swal('Please open metamask and switch your network to Rinkeby!');
         } else {
           console.debug('Error: ', e.message);
         }
