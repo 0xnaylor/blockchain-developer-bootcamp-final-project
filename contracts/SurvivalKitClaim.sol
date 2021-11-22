@@ -121,11 +121,8 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
     /// @param tokenId used to seed the random function
     /// @return A random item from the array of items available.
     function pickRandomItem(uint256 tokenId) internal view returns (string memory) {
-        console.log("Random Seed: ", string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))));
         uint256 rand = random(string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))));
-        console.log("pickRandomItem rand: ", rand);
         rand = rand % item.length;
-        console.log("pickRandomItem rand: ", rand);
         return item[rand];
     }
 
@@ -186,8 +183,6 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         string memory selectedItem = pickRandomItem(newItemId);
         string memory completeKit = string(abi.encodePacked(selectedWeapon, selectedTransport, selectedItem));
 
-        console.log("completeKit: ", completeKit);
-
         // Add the random color in.
         string memory randomColor = pickRandomBackgroundColour(newItemId);
         // string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, completeKit, "</text></svg>"));
@@ -196,9 +191,6 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         createItem(selectedTransport, 2), 
         createItem(selectedItem, 3), 
         "</svg>"));
-
-        console.log("finalSvg: ", finalSvg);
-
         // get all the JSON metadata in place and base64 encode it
         string memory json = Base64.encode(
             bytes(
@@ -213,17 +205,11 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
                 )
             )
         );
-        console.log("BASE64 encoded JSON: ", json);
 
         // Just like before, we prepend data:application/json;base64, to our data.
         string memory finalTokenUri = string(
             abi.encodePacked("data:application/json;base64,", json)
         );
-        console.log("finalTokenUri: ", finalTokenUri);
-
-        console.log("\n--------------------");
-        // console.log(finalTokenUri);
-        console.log("--------------------\n");  
 
         // actually mint the NFT to the sender using msg.sender
         _safeMint(msg.sender, newItemId);
@@ -233,7 +219,6 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
 
         // increment the counter for when the next NFT is minted
         _tokenIds.increment();
-        console.log("An NFT with ID %s has been minted to %s", newItemId, msg.sender);
         emit SurvivalKitNftClaimed(msg.sender, newItemId);
     }
 

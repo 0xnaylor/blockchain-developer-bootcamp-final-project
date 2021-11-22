@@ -13,6 +13,9 @@ const {
 contract("SurvivalKitClaim Test Suite", function (accounts) {
   "use strict";
 
+  // const mintFee = new BigNumber("10000000000000000");
+  const mintFee = toBN("10000000000000000");
+
   const EventNames = {
     Transfer: "Transfer",
     Approval: "Approval",
@@ -84,7 +87,7 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
     // tests covering the minting of an NFT
     it("correctly retrieve owner of mint", async () => {
       const tokenId = await contract.totalSupply();
-      await contract.mintNFT({ from: minter });
+      await contract.mintNFT({ from: minter, value: mintFee });
       const owner = await contract.ownerOf(tokenId);
       assert.equal(
         minter,
@@ -93,12 +96,16 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
       );
     });
 
+    it("reverts transaction if not enough ETH is sent with it", async () => {
+      await catchRevert(contract.mintNFT({ from: minter }));
+    });
+
     it("return correct current mint count", async () => {
       // check the current mint count
       const currentCount = await contract.totalSupply();
       const expectedCount = currentCount.add(toBN(1));
       // mint and NFT
-      await contract.mintNFT({ from: minter });
+      await contract.mintNFT({ from: minter, value: mintFee });
       // check that the new mint count is the previous +1
       const newCurrentCount = await contract.totalSupply();
       assert.isTrue(
@@ -123,7 +130,7 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
       // get current balance of minter
       const currentBalance = await contract.balanceOf(minter);
       // mint an NFT
-      await contract.mintNFT({ from: minter });
+      await contract.mintNFT({ from: minter, value: mintFee });
       // get the new balance of the minter
       const newBalance = await contract.balanceOf(minter);
       // check that the minters balance has increased by 1
@@ -136,7 +143,7 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
     it("should fire a 'transfer' event after minting", async () => {
       const currentCount = await contract.totalSupply();
       expectEvent(
-        await contract.mintNFT({ from: minter }),
+        await contract.mintNFT({ from: minter, value: mintFee }),
         EventNames.Transfer,
         { 0: ZERO_ADDRESS, 1: minter, 2: currentCount }
       );
@@ -144,10 +151,14 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
 
     it("should fire a 'NewEpicNFTMinted' event after minting", async () => {
       const currentCount = await contract.totalSupply();
-      expectEvent(await contract.mintNFT({ from: minter }), EventNames.Minted, {
-        0: minter,
-        1: currentCount,
-      });
+      expectEvent(
+        await contract.mintNFT({ from: minter, value: mintFee }),
+        EventNames.Minted,
+        {
+          0: minter,
+          1: currentCount,
+        }
+      );
     });
   });
 
@@ -167,7 +178,7 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
 
     beforeEach(async () => {
       // make sure the sender has a token to transfer
-      await contract.mintNFT({ from: sender });
+      await contract.mintNFT({ from: sender, value: mintFee });
     });
 
     it("a transfer decreases sender's balance and increasing recipient's balance by as much", async () => {
@@ -275,7 +286,7 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
     let owner = null;
 
     beforeEach(async () => {
-      await contract.mintNFT({ from: owner });
+      await contract.mintNFT({ from: owner, value: mintFee });
       tokenId = await contract.tokenOfOwnerByIndex(owner, 0);
     });
 
@@ -327,7 +338,7 @@ contract("SurvivalKitClaim Test Suite", function (accounts) {
 
     before(async () => {
       sender = chance.pickone(accounts);
-      await contract.mintNFT({ from: sender });
+      await contract.mintNFT({ from: sender, value: mintFee });
     });
 
     beforeEach(async () => {

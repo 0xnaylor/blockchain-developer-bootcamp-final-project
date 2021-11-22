@@ -154,7 +154,7 @@ truffle migrate --network rinkeby --reset
 If not done already, start a local development blockchain on port 8545 by running:
 
 ```
-gananche_cli
+ganache-cli -p 8545
 ```
 
 Note: sudo is required to run the script because it needs permission to create the log file (/var/log/ganache.log).
@@ -175,8 +175,3 @@ truffle run coverage
 
 - Automate the retrieval of the contract address from the generated JSON file, instead of having to manually copy and paste it after a new deployment.
 - Maybe experiment with making the contract upgradable via a proxy
-- Add an alert to the UI if you are not connected to the right network
-- Remember to remove all console logs from both front end and back end before submission
-- Add a note in this README about the time delay being able to see the metadata on OpenSea.
-- useEagerConnect
-- - make sure there is an error message if the user doesn't have metamask installed.
