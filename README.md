@@ -41,6 +41,18 @@ The frontend has already been deployed on Netlify and can be accessed here:
 
 https://zombie-apocalypse-surival-kit.netlify.app/#/
 
+## Starting the UI locally:
+
+Navigate into the client directory, install the dependencies then run the start script:
+
+```
+cd client
+npm install
+npm run start
+```
+
+Note the UI will currently only connect to the Rinkeby testnet. This will be addressed in future versions.
+
 ## Deploying the smart contract
 
 In a new terminal, navigate to the project root and install the projects dependencies as well as ganache-cli
