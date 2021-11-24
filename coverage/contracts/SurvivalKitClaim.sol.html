@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for contracts/SurvivalKitClaim.sol</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">contracts/</a> SurvivalKitClaim.sol
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">82% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>41/50</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">57.14% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>8/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">65% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>13/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">81.63% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>40/49</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">60×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// SPDX-License-Identifier: MIT
+pragma solidity 0.8.0;
+&nbsp;
+// We selectedWeapon import some OpenZeppelin Contracts.
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "hardhat-console/contracts/console.sol";
+&nbsp;
+// Import helper functions needed for Base62 encoding
+import { Base64 } from "./libraries/Base64.sol";
+&nbsp;
+/**
+@title Zombie Apocalipse Survival kit generator
+@author Ben Naylor
+ */
+contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable {
+&nbsp;
+    uint private supplyCap = 3000;
+&nbsp;
+    /// @notice keep track of token ids using purpose built OpenZeppelin utility
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+&nbsp;
+    /// @dev We split the SVG at the part where it asks for the background color.
+    string svgPartOne = "&lt;svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMinYMin meet' viewBox='0 0 350 350'&gt;&lt;style&gt;.base { fill: white; font-family: serif; font-size: 24px; }&lt;/style&gt;&lt;rect width='100%' height='100%' fill='";
+    // string svgPartTwo = "'/&gt;&lt;text x='50%' y='50%' class='base' dominant-baseline='middle' text-anchor='middle'&gt;";
+    string svgPartTwo = "'/&gt;";
+&nbsp;
+    string[] weapon = ["Crossbow", "Shotgun", "Samuri Sword", "Baseball Bat", "Crowbar", "slingshot", "Axe", "Katana", "Sledge Hammer", "Machete", "Handgun", "Kunckle Duster", "Rifle", "Tomahawk", "Pointy Stick"];
+    string[] transport = ["Motorbike", "Car", "Bicycle", "Jeep", "On Foot", "Helicopter", "Boat", "Skateboard", "Rollerblades", "Scooter"];
+    string[] item = ["Torch", "Animal Snare", "Medicine", "Radio", "Map", "Wistle", "Candle", "Walkie-Talkie", "Water Bottle", "Water Purification Tablets", "Gloves", "Binoculars", "Watch", "Food Rations"];
+    string[] colors = ["red", "black", "blue", "green", "indigo", "grey"];
+&nbsp;
+    /// @notice Event to be emitted after a successful mint
+    /// @param sender The address of the transaction sender
+    /// @param tokenId The id of the token that has just been minted
+    event SurvivalKitNftClaimed(address sender, uint256 tokenId);
+&nbsp;
+    /// @notice contract constructor. Takes parameters and passes them to the inherited ERC721 contract constructor
+    /// @param _name the name of the contract
+    /// @param _symbol the symbol that contract tokens will be represented by
+    /// @param _supplyCap the maximum token that are mintable from this contract
+    constructor(string memory _name, string memory _symbol, uint _supplyCap) ERC721(_name, _symbol) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_supplyCap &gt; 0, "supplyCap must be greater than 0");
+        supplyCap = _supplyCap;
+    }
+&nbsp;
+    /// @notice pauses the contract. 
+    /// @dev Inherits _pause() function from Pausable.sol and the onlyOwner modifier from Ownable.sol
+    function pause() public onlyOwner {
+        _pause();
+    }
+&nbsp;
+    /// @notice unpauses the contract. 
+    /// @dev Inherits _unpause() function from Pausable.sol and the onlyOwner modifier from Ownable.sol
+    function unpause() public onlyOwner {
+        _unpause();
+    }
+&nbsp;
+    /// @return maximum number of mints allowed on contract 
+    function getSupplyCap() public view returns(uint256) {
+        return supplyCap;
+    }
+&nbsp;
+    /// @return number of remaining mints on the contract
+    function getRemainingMints () public view returns (uint256) {
+        return supplyCap - _tokenIds.current();
+    }
+&nbsp;
+    /// @return number of tokens minted on the contract so far.
+<span class="fstat-no" title="function not covered" >    function getTotalNFTsMintedSoFar () public view returns (uint256) {</span>
+<span class="cstat-no" title="statement not covered" >        return _tokenIds.current();</span>
+    }
+&nbsp;
+    /// @return a uint representing the balance (in wei) held by the contract.
+<span class="fstat-no" title="function not covered" >    function balanceOfContract()  public view returns(uint){</span>
+<span class="cstat-no" title="statement not covered" >        return address(this).balance;</span>
+    }
+&nbsp;
+    /// @notice allows the contract owner to withdraw the funds currently being held by the contract. 
+<span class="fstat-no" title="function not covered" >    function withdrawAllFunds()  public payable onlyOwner {</span>
+<span class="cstat-no" title="statement not covered" >        (bool sent, ) = msg.sender.call{value: address(this).balance}("");</span>
+<span class="cstat-no" title="statement not covered" >        require(sent, "Failed to send Ether")</span>;
+    }
+&nbsp;
+    /// @notice allows the contract owner to withdraw the funds currently being held by the contract. 
+<span class="fstat-no" title="function not covered" >    function withdrawFunds(uint amount)  public payable onlyOwner {</span>
+<span class="cstat-no" title="statement not covered" >        (bool sent, ) = msg.sender.call{value: amount}("");</span>
+<span class="cstat-no" title="statement not covered" >        require(sent, "Failed to send Ether")</span>;
+    }
+&nbsp;
+    /// @notice pick a random weappon to equip the player with
+    /// @dev the randomness could be improved by using an oracle feed.
+    /// @param tokenId used to seed the random function
+    /// @return A random weapon from the array of weapons available.
+    function pickRandomWeapon(uint256 tokenId) internal view returns (string memory) {
+        // seed the random generator
+        uint256 rand = random(string(abi.encodePacked("WEAPON", Strings.toString(tokenId))));
+        // Squash the # between 0 and the length of the array to avoid going out of bounds.
+        rand = rand % weapon.length;
+        return weapon[rand];
+    }
+&nbsp;
+    /// @notice pick a random transport to equip the player with
+    /// @param tokenId used to seed the random function
+    /// @return A random weapon from the array of transport available.
+    function pickRandomTransport(uint256 tokenId) internal view returns (string memory) {
+        uint256 rand = random(string(abi.encodePacked("TRANSPORT", Strings.toString(tokenId))));
+        rand = rand % transport.length;
+        return transport[rand];
+    }
+&nbsp;
+    /// @notice pick a random item to equip the player with
+    /// @param tokenId used to seed the random function
+    /// @return A random item from the array of items available.
+    function pickRandomItem(uint256 tokenId) internal view returns (string memory) {
+        uint256 rand = random(string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))));
+        rand = rand % item.length;
+        return item[rand];
+    }
+&nbsp;
+    /// @notice pick a random background colour for the players card
+    /// @param tokenId used to seed the random function
+    /// @return A random background colour from the array of colours available.
+    function pickRandomBackgroundColour(uint256 tokenId) internal view returns (string memory) {
+        uint256 rand = random(string(abi.encodePacked("COLOUR", Strings.toString(tokenId))));
+        rand = rand % colors.length;
+        return colors[rand];
+    } 
+&nbsp;
+    /// @param input string input which is hashed to generate the 'random' number.
+    /// @dev this function could be made truly random by using an oracle feed.
+    /// @return A random integer
+    function random(string memory input) internal pure returns (uint256) {
+        return uint(keccak256(abi.encodePacked(input)));
+    }
+&nbsp;
+    /// @dev overriding this function was required to inherit from both ERC721 and ERC721URIStorage
+<span class="fstat-no" title="function not covered" >    function _burn(uint256 tokenId) internal whenNotPaused override(ERC721, ERC721URIStorage) {</span>
+<span class="cstat-no" title="statement not covered" >        super._burn(tokenId)</span>;
+    }
+&nbsp;
+    /// @param tokenId the tokenId to retrieve URI for
+    /// @return the token URI containing the tokens metadata
+<span class="fstat-no" title="function not covered" >    function tokenURI(uint256 tokenId) public view override (ERC721, ERC721URIStorage) returns (string memory) {</span>
+<span class="cstat-no" title="statement not covered" >        return super.tokenURI(tokenId);</span>
+    }
+&nbsp;
+    /// @notice helper function to place items on separate lines. 
+    /// @dev function seems clunky. This should be refactor into a more elegant solution.
+    /// @param claimedItem the name of the item to be added to the NFT.
+    /// @param itemNumber the position in which to display the item in the NFT art.
+    /// @return An SVG string containing the item and its display position in the NFT art. 
+    function createItem(string memory claimedItem, uint itemNumber) internal pure returns (string memory) {
+        string memory position;
+        if(itemNumber == 1) {
+            position = "40%";
+        } else if (itemNumber == 2) {
+            position = "50%";
+        } else {
+            position = "60%";
+        }
+        
+        return string(abi.encodePacked("&lt;text x='50%' y='", position, "' class='base' dominant-baseline='middle' text-anchor='middle'&gt;", claimedItem, "&lt;/text&gt;"));
+    }
+    
+&nbsp;
+    /// @notice mint an ERC721 token on the contract. The caller will receive a token containing a survival kit that includes a weapon, a transport and an item. All are randomly selected.  
+    /// @dev currently does not accept payment
+    /// @dev this function creates and stores the tokens URI. This is a JSON string constisting of name, description and image fields. The image is a BASE64 encoded SVG. Finally The whole JSON metadata string is BASE64 encoded and mapped to the tokenId.
+    function mintNFT() public payable whenNotPaused{
+        <span class="missing-if-branch" title="else path not taken" >E</span>require(_tokenIds.current() &lt;= supplyCap, "There are no NFTs left to mint");
+        require(msg.value &gt;= 10000000000000000, "Not enough ETH sent; check price!");
+        
+        // get the current tokenId, this starts at 0
+        uint newItemId = _tokenIds.current();
+&nbsp;
+        // randomly grab one word from each of the arrays
+        string memory selectedWeapon = pickRandomWeapon(newItemId);
+        string memory selectedTransport = pickRandomTransport(newItemId);
+        string memory selectedItem = pickRandomItem(newItemId);
+&nbsp;
+        // Add the random color in.
+        string memory randomColor = pickRandomBackgroundColour(newItemId);
+        string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, 
+        createItem(selectedWeapon, 1), 
+        createItem(selectedTransport, 2), 
+        createItem(selectedItem, 3), 
+        "&lt;/svg&gt;"));
+        // get all the JSON metadata in place and base64 encode it
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name": "',"Survival Kit",
+                        '", "description": "Zombie Apocalypse Survival Kit", "image": "data:image/svg+xml;base64,',
+                    // add data:image/svg+xml;base64 and then append our base64 encode our svg.
+                    Base64.encode(bytes(finalSvg)),
+                    '"}'
+                    )
+                )
+            )
+        );
+&nbsp;
+        // Just like before, we prepend data:application/json;base64, to our data.
+        string memory finalTokenUri = string(
+            abi.encodePacked("data:application/json;base64,", json)
+        );
+&nbsp;
+        // actually mint the NFT to the sender using msg.sender
+        _safeMint(msg.sender, newItemId);
+&nbsp;
+        // store the tokens metadata
+        _setTokenURI(newItemId, finalTokenUri);
+&nbsp;
+        // increment the counter for when the next NFT is minted
+        _tokenIds.increment();
+        emit SurvivalKitNftClaimed(msg.sender, newItemId);
+    }
+&nbsp;
+    // The following functions are overrides required by Solidity.
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal whenNotPaused override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+&nbsp;
+    /// @notice required override in order to inherit from both ERC721 and ERC721Enumerable
+<span class="fstat-no" title="function not covered" >    function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {</span>
+<span class="cstat-no" title="statement not covered" >        return super.supportsInterface(interfaceId);</span>
+    }
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Nov 24 2021 13:35:05 GMT+0000 (Greenwich Mean Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
