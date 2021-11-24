@@ -37,6 +37,10 @@ The root directory of the project contains the following sub-directories:
 - node_modules: contains all smart contract dependencies
 - tests - contains the smart contract unit tests (written in javascript). Also includes a utils sub-directory.
 
+## Project Walkthrough Video
+
+https://drive.google.com/file/d/1-W-y-Z7djwkykW6YosEb5_9XkcnBa0ol/view?usp=sharing
+
 ## Accessing the UI:
 
 The frontend has already been deployed on Netlify and can be accessed here:
