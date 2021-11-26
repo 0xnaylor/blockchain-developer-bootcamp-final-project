@@ -94,44 +94,31 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         require(sent, "Failed to send Ether");
     }
 
-    /// @notice pick a random weappon to equip the player with
-    /// @dev the randomness could be improved by using an oracle feed.
-    /// @param tokenId used to seed the random function
-    /// @return A random weapon from the array of weapons available.
-    function pickRandomWeapon(uint256 tokenId) internal view returns (string memory) {
-        // seed the random generator
-        uint256 rand = random(string(abi.encodePacked("WEAPON", Strings.toString(tokenId))));
-        // Squash the # between 0 and the length of the array to avoid going out of bounds.
-        rand = rand % weapon.length;
-        return weapon[rand];
-    }
+    function compareStrings(string memory a, string memory b) public view returns (bool) {
+    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+}
 
-    /// @notice pick a random transport to equip the player with
-    /// @param tokenId used to seed the random function
-    /// @return A random weapon from the array of transport available.
-    function pickRandomTransport(uint256 tokenId) internal view returns (string memory) {
-        uint256 rand = random(string(abi.encodePacked("TRANSPORT", Strings.toString(tokenId))));
-        rand = rand % transport.length;
-        return transport[rand];
-    }
+    function pickRandomTrait(uint tokenId, string memory trait) internal view returns (string memory) {
+        // create the psuedo random number using function paramters as a seed
+        uint256 rand = random(string(abi.encodePacked(trait, Strings.toString(tokenId))));
 
-    /// @notice pick a random item to equip the player with
-    /// @param tokenId used to seed the random function
-    /// @return A random item from the array of items available.
-    function pickRandomItem(uint256 tokenId) internal view returns (string memory) {
-        uint256 rand = random(string(abi.encodePacked("THIRD_WORD", Strings.toString(tokenId))));
-        rand = rand % item.length;
-        return item[rand];
-    }
+        if (compareStrings(trait, "WEAPON")) {
+            rand = rand % weapon.length;
+            return weapon[rand];
+        } else if (compareStrings(trait, "TRANSPORT")) {
+            rand = rand % transport.length;
+            return transport[rand];
+        } else if (compareStrings(trait, "ITEM")) {
+            rand = rand % item.length;
+            return item[rand];
+        } else if (compareStrings(trait, "COLOUR")) {
+            rand = rand % colors.length;
+            return colors[rand];
+        } else {
+            return "";
+        }
 
-    /// @notice pick a random background colour for the players card
-    /// @param tokenId used to seed the random function
-    /// @return A random background colour from the array of colours available.
-    function pickRandomBackgroundColour(uint256 tokenId) internal view returns (string memory) {
-        uint256 rand = random(string(abi.encodePacked("COLOUR", Strings.toString(tokenId))));
-        rand = rand % colors.length;
-        return colors[rand];
-    } 
+    }
 
     /// @param input string input which is hashed to generate the 'random' number.
     /// @dev this function could be made truly random by using an oracle feed.
@@ -181,12 +168,12 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         uint newItemId = _tokenIds.current();
 
         // randomly grab one word from each of the arrays
-        string memory selectedWeapon = pickRandomWeapon(newItemId);
-        string memory selectedTransport = pickRandomTransport(newItemId);
-        string memory selectedItem = pickRandomItem(newItemId);
+        string memory selectedWeapon = pickRandomTrait(newItemId, "WEAPON");
+        string memory selectedTransport = pickRandomTrait(newItemId, "TRANSPORT");
+        string memory selectedItem = pickRandomTrait(newItemId, "ITEM");
 
         // Add the random color in.
-        string memory randomColor = pickRandomBackgroundColour(newItemId);
+        string memory randomColor = pickRandomTrait(newItemId, "COLOUR");
         string memory finalSvg = string(abi.encodePacked(svgPartOne, randomColor, svgPartTwo, 
         createItem(selectedWeapon, 1), 
         createItem(selectedTransport, 2), 

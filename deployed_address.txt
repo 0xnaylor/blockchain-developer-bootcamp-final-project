@@ -1,2 +1,2 @@
 Testnet: Rinkeby
-Contract Address: 0x05c9905fc2bD11B881C0B309Bc94303c21C57B2d
+Contract Address: 0xe56F7A1a5b43161e58f8e5D8Bce4d1956f410eD7

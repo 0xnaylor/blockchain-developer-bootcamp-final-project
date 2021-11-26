@@ -120,6 +120,18 @@ To generate a test coverage report run the following command:
 truffle run coverage
 ```
 
+## Gas usage
+
+A note to the grader:
+
+At the moment this contracts gas usage is an issue. As can be seen in this transaction:
+https://rinkeby.etherscan.io/tx/0x322d9e1ecd14f51b8e7bbdf475d5438c6a36c34a91119e312ecb726dbb193de3
+
+The gas charged for this transaction (0.001701526513612212 Ether) assumes a max fee of 1.500000015 Gwei
+In reality you will never see gas fees that low on Ethereum mainnet.
+Assuming a fee of 150 Gwei for this transaction would be more realistic in times of peak network usage.
+This would mean the cost of this transaction would be 0.1701526513612212 Ether or $704.06 at the time of writing.
+
 ## Extra functionality to add in future releases:
 
 - Automate the retrieval of the contract address from the generated JSON file in client/src/contracts, instead of having to manually copy and paste it after a new deployment.
