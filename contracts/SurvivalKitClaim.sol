@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "hardhat-console/contracts/console.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 // Import helper functions needed for Base62 encoding
 import { Base64 } from "./libraries/Base64.sol";
@@ -18,7 +19,7 @@ import { Base64 } from "./libraries/Base64.sol";
 @title Zombie Apocalipse Survival kit generator
 @author Ben Naylor
  */
-contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable {
+contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, Ownable, ReentrancyGuard {
 
     uint private supplyCap = 3000;
 
@@ -94,9 +95,9 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
         require(sent, "Failed to send Ether");
     }
 
-    function compareStrings(string memory a, string memory b) public view returns (bool) {
-    return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
-}
+    function compareStrings(string memory a, string memory b) public pure returns (bool) {
+        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+    }
 
     function pickRandomTrait(uint tokenId, string memory trait) internal view returns (string memory) {
         // create the psuedo random number using function paramters as a seed
@@ -160,7 +161,7 @@ contract SurvivalKitClaim is ERC721, ERC721Enumerable, ERC721URIStorage, Pausabl
     /// @notice mint an ERC721 token on the contract. The caller will receive a token containing a survival kit that includes a weapon, a transport and an item. All are randomly selected.  
     /// @dev currently does not accept payment
     /// @dev this function creates and stores the tokens URI. This is a JSON string constisting of name, description and image fields. The image is a BASE64 encoded SVG. Finally The whole JSON metadata string is BASE64 encoded and mapped to the tokenId.
-    function mintNFT() public payable whenNotPaused{
+    function mintNFT() public payable whenNotPaused { 
         require(_tokenIds.current() <= supplyCap, "There are no NFTs left to mint");
         require(msg.value >= 10000000000000000, "Not enough ETH sent; check price!");
         
